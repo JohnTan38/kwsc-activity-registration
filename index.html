@@ -3,426 +3,326 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KWSC @ McNair — March 2026 Schedule</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<title>KWSC @ McNair — March 2026 Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Firebase v10 SDK (modular, loaded as compat for simplicity) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <style>
-  :root {
-    --mon: #FF6B6B;
-    --tue: #FF9F43;
-    --wed: #54A0FF;
-    --thu: #5F27CD;
-    --fri: #00D2D3;
-    --mon-light: #fff0f0;
-    --tue-light: #fff5e6;
-    --wed-light: #eef5ff;
-    --thu-light: #f0ebff;
-    --fri-light: #e6fafa;
-    --bg: #0f0f1a;
-    --card: #1a1a2e;
-    --card2: #16213e;
-    --text: #e8e8f0;
-    --muted: #8888aa;
-    --border: rgba(255,255,255,0.07);
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --mon:#FF6B6B;--tue:#FF9F43;--wed:#54A0FF;--thu:#a78bfa;--fri:#00D2D3;
+  --bg:#0f0f1a;--card:#1a1a2e;--card2:#16213e;--card3:#0d1b35;
+  --text:#e8e8f0;--muted:#8888aa;--border:rgba(255,255,255,0.07);
+  --success:#00D2D3;--danger:#FF6B6B;--warn:#FF9F43;
+}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(84,160,255,.1) 0%,transparent 60%),
+             radial-gradient(ellipse 60% 40% at 80% 90%,rgba(255,107,107,.08) 0%,transparent 60%);
+  pointer-events:none}
+.wrapper{position:relative;z-index:1;max-width:1360px;margin:0 auto;padding:24px 16px 80px}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+/* ── HEADER ── */
+.header{text-align:center;padding:36px 20px 28px}
+.header-badge{display:inline-block;background:linear-gradient(135deg,#FF6B6B,#FF9F43);color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:12px}
+.header h1{font-family:'Nunito',sans-serif;font-size:clamp(28px,5vw,50px);font-weight:900;background:linear-gradient(135deg,#FF6B6B 0%,#FF9F43 30%,#54A0FF 65%,#00D2D3 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:6px}
+.header .subtitle{color:var(--muted);font-size:14px}
+.notice-bar{display:inline-flex;align-items:center;gap:8px;background:rgba(255,159,67,.12);border:1px solid rgba(255,159,67,.3);border-radius:30px;padding:7px 18px;font-size:12px;color:#FF9F43;font-weight:600;margin-top:14px}
+/* Firebase status pill in header */
+.fb-status{display:inline-flex;align-items:center;gap:7px;border-radius:30px;padding:5px 14px;font-size:11px;font-weight:700;margin-top:8px;margin-left:8px;border:1px solid}
+.fb-status.connecting{background:rgba(255,159,67,.1);border-color:rgba(255,159,67,.3);color:#FF9F43}
+.fb-status.live{background:rgba(0,210,211,.1);border-color:rgba(0,210,211,.3);color:#00D2D3}
+.fb-status.offline{background:rgba(255,107,107,.1);border-color:rgba(255,107,107,.3);color:#FF6B6B}
+.fb-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 1.5s infinite}
+.fb-status.live .fb-dot{animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* ── TABS ── */
+.tabs{display:flex;justify-content:center;gap:10px;margin:24px 0 20px;flex-wrap:wrap}
+.tab-btn{display:flex;align-items:center;gap:7px;background:var(--card2);border:1px solid var(--border);color:var(--muted);padding:10px 22px;border-radius:30px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;transition:all .2s}
+.tab-btn:hover{border-color:rgba(84,160,255,.4);color:var(--text)}
+.tab-btn.active{background:linear-gradient(135deg,#54A0FF,#5F27CD);border-color:transparent;color:#fff;box-shadow:0 4px 18px rgba(84,160,255,.3)}
+.tab-btn .badge{background:rgba(255,255,255,.2);border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700}
 
-  /* ── ANIMATED BG ── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(84,160,255,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 90%, rgba(255,107,107,0.10) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 60% at 60% 40%, rgba(95,39,205,0.08) 0%, transparent 55%);
-    pointer-events: none;
-  }
+/* ── CONTROLS ── */
+.controls{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.controls label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.week-select{appearance:none;background:var(--card2);border:1px solid rgba(84,160,255,.3);border-radius:12px;color:var(--text);font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;padding:10px 36px 10px 16px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2354A0FF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;min-width:200px}
+.week-select:focus{outline:none;border-color:#54A0FF;box-shadow:0 0 0 3px rgba(84,160,255,.15)}
 
-  .wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 24px 16px 60px; }
+/* ── SCHEDULE GRID ── */
+.schedule-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;border-radius:20px;overflow:hidden;border:1px solid var(--border)}
+.day-header-cell{padding:14px 10px 12px;text-align:center;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:1.5px}
+.day-header-cell .dn{font-size:15px}.day-header-cell .dc{font-size:10px;opacity:.7;margin-top:1px}
+.day-header-cell.mon{background:linear-gradient(135deg,rgba(255,107,107,.35),rgba(255,107,107,.15));color:#FF6B6B;border-bottom:2px solid rgba(255,107,107,.4)}
+.day-header-cell.tue{background:linear-gradient(135deg,rgba(255,159,67,.35),rgba(255,159,67,.15));color:#FF9F43;border-bottom:2px solid rgba(255,159,67,.4)}
+.day-header-cell.wed{background:linear-gradient(135deg,rgba(84,160,255,.35),rgba(84,160,255,.15));color:#54A0FF;border-bottom:2px solid rgba(84,160,255,.4)}
+.day-header-cell.thu{background:linear-gradient(135deg,rgba(95,39,205,.35),rgba(95,39,205,.15));color:var(--thu);border-bottom:2px solid rgba(95,39,205,.4)}
+.day-header-cell.fri{background:linear-gradient(135deg,rgba(0,210,211,.35),rgba(0,210,211,.15));color:#00D2D3;border-bottom:2px solid rgba(0,210,211,.4)}
+.week-banner{grid-column:1/-1;padding:8px 16px;background:rgba(255,255,255,.03);border-top:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;display:flex;align-items:center;gap:10px}
+.week-banner::after{content:'';flex:1;height:1px;background:var(--border)}
+.day-col{background:var(--card);padding:10px 8px;display:flex;flex-direction:column;gap:6px;min-height:130px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.day-col.mon{border-left:3px solid rgba(255,107,107,.3)}
+.day-col.tue{border-left:3px solid rgba(255,159,67,.3)}
+.day-col.wed{border-left:3px solid rgba(84,160,255,.3)}
+.day-col.thu{border-left:3px solid rgba(95,39,205,.3)}
+.day-col.fri{border-left:3px solid rgba(0,210,211,.3)}
+.day-col.empty{background:rgba(255,255,255,.01)}
+.date-chip{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;margin-bottom:3px;opacity:.7}
 
-  /* ── HEADER ── */
-  .header {
-    text-align: center;
-    padding: 40px 20px 32px;
-    position: relative;
-  }
-  .header-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #FF6B6B, #FF9F43);
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 5px 16px;
-    border-radius: 20px;
-    margin-bottom: 14px;
-  }
-  .header h1 {
-    font-family: 'Nunito', sans-serif;
-    font-size: clamp(28px, 5vw, 52px);
-    font-weight: 900;
-    background: linear-gradient(135deg, #FF6B6B 0%, #FF9F43 30%, #54A0FF 65%, #00D2D3 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.1;
-    margin-bottom: 6px;
-  }
-  .header .subtitle {
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
-  .header .chinese {
-    font-size: 13px;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 1px;
-  }
-  .notice-bar {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255,159,67,0.12);
-    border: 1px solid rgba(255,159,67,0.3);
-    border-radius: 30px;
-    padding: 7px 18px;
-    font-size: 12px;
-    color: #FF9F43;
-    font-weight: 600;
-    margin-top: 16px;
-    letter-spacing: 0.3px;
-  }
-  .notice-bar span { font-size: 16px; }
+/* ── ACTIVITY CARD ── */
+.act{border-radius:10px;padding:8px 9px;cursor:pointer;position:relative;transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s;overflow:visible;z-index:1;user-select:none}
+.act:hover{transform:translateY(-3px) scale(1.02);z-index:50}
+.act.mon{background:linear-gradient(135deg,rgba(255,107,107,.18),rgba(255,107,107,.06));border:1px solid rgba(255,107,107,.25)}
+.act.mon:hover{box-shadow:0 8px 24px rgba(255,107,107,.3);border-color:rgba(255,107,107,.6)}
+.act.tue{background:linear-gradient(135deg,rgba(255,159,67,.18),rgba(255,159,67,.06));border:1px solid rgba(255,159,67,.25)}
+.act.tue:hover{box-shadow:0 8px 24px rgba(255,159,67,.3);border-color:rgba(255,159,67,.6)}
+.act.wed{background:linear-gradient(135deg,rgba(84,160,255,.18),rgba(84,160,255,.06));border:1px solid rgba(84,160,255,.25)}
+.act.wed:hover{box-shadow:0 8px 24px rgba(84,160,255,.3);border-color:rgba(84,160,255,.6)}
+.act.thu{background:linear-gradient(135deg,rgba(95,39,205,.18),rgba(95,39,205,.06));border:1px solid rgba(95,39,205,.25)}
+.act.thu:hover{box-shadow:0 8px 24px rgba(95,39,205,.3);border-color:rgba(95,39,205,.6)}
+.act.fri{background:linear-gradient(135deg,rgba(0,210,211,.18),rgba(0,210,211,.06));border:1px solid rgba(0,210,211,.25)}
+.act.fri:hover{box-shadow:0 8px 24px rgba(0,210,211,.3);border-color:rgba(0,210,211,.6)}
+.act-name{font-size:11px;font-weight:700;line-height:1.35;color:var(--text)}
+.act-cn{font-size:9.5px;color:var(--muted);margin-top:1px}
+.act-time{font-size:10px;font-weight:600;margin-top:3px;display:flex;align-items:center;gap:3px}
+.act.mon .act-time{color:#FF6B6B}.act.tue .act-time{color:#FF9F43}.act.wed .act-time{color:#54A0FF}.act.thu .act-time{color:var(--thu)}.act.fri .act-time{color:#00D2D3}
+.act-reg-tag{display:inline-flex;align-items:center;gap:3px;font-size:9px;color:rgba(255,200,100,.7);margin-top:2px;font-style:italic}
+.reg-count{position:absolute;top:-6px;right:-6px;background:#FF9F43;color:#fff;font-size:9px;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--bg);opacity:0;transition:opacity .2s}
+.reg-count.has-regs{opacity:1}
+.reg-btn{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:6px;width:100%;padding:5px 0;border-radius:7px;font-size:9.5px;font-weight:700;border:none;cursor:pointer;transition:all .15s;letter-spacing:.3px}
+.act.mon .reg-btn{background:rgba(255,107,107,.15);color:#FF6B6B;border:1px solid rgba(255,107,107,.3)}
+.act.mon .reg-btn:hover{background:rgba(255,107,107,.3)}
+.act.tue .reg-btn{background:rgba(255,159,67,.15);color:#FF9F43;border:1px solid rgba(255,159,67,.3)}
+.act.tue .reg-btn:hover{background:rgba(255,159,67,.3)}
+.act.wed .reg-btn{background:rgba(84,160,255,.15);color:#54A0FF;border:1px solid rgba(84,160,255,.3)}
+.act.wed .reg-btn:hover{background:rgba(84,160,255,.3)}
+.act.thu .reg-btn{background:rgba(95,39,205,.15);color:var(--thu);border:1px solid rgba(95,39,205,.3)}
+.act.thu .reg-btn:hover{background:rgba(95,39,205,.3)}
+.act.fri .reg-btn{background:rgba(0,210,211,.15);color:#00D2D3;border:1px solid rgba(0,210,211,.3)}
+.act.fri .reg-btn:hover{background:rgba(0,210,211,.3)}
+.act.closed-reg{opacity:.65}
+.act.closed-reg .reg-btn{background:rgba(136,136,170,.08)!important;color:var(--muted)!important;border-color:rgba(136,136,170,.15)!important;cursor:not-allowed!important}
+.reg-closed-badge{font-size:9px;color:var(--muted);margin-top:3px;text-align:center;font-style:italic}
 
-  /* ── CONTROLS ── */
-  .controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin: 28px 0 24px;
-    flex-wrap: wrap;
-  }
-  .controls label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .week-select {
-    appearance: none;
-    background: var(--card2);
-    border: 1px solid rgba(84,160,255,0.3);
-    border-radius: 12px;
-    color: var(--text);
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 10px 36px 10px 16px;
-    cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2354A0FF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    min-width: 220px;
-  }
-  .week-select:focus { outline: none; border-color: #54A0FF; box-shadow: 0 0 0 3px rgba(84,160,255,0.15); }
-  .view-all-btn {
-    background: linear-gradient(135deg, #54A0FF, #5F27CD);
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .view-all-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(84,160,255,0.35); }
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;backdrop-filter:blur(6px);justify-content:center;align-items:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);width:100%;max-width:500px;border-radius:24px;border:1px solid var(--border);padding:32px;box-shadow:0 30px 60px rgba(0,0,0,.6);position:relative;animation:modalIn .25s cubic-bezier(.34,1.56,.64,1)}
+@keyframes modalIn{from{opacity:0;transform:scale(.92) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-close{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.06);border:none;color:var(--muted);cursor:pointer;font-size:18px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.modal-close:hover{background:rgba(255,255,255,.12);color:#fff}
+.modal-icon{font-size:32px;margin-bottom:12px}
+.modal-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:3px;font-family:'Nunito',sans-serif}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.info-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.info-pill{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px 12px}
+.info-pill .ip-label{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.info-pill .ip-val{font-size:12px;font-weight:700;color:var(--text);line-height:1.35}
+.reg-alert{display:none;border-radius:12px;padding:11px 14px;margin-bottom:16px;font-size:12px;font-weight:600;line-height:1.5;align-items:flex-start;gap:10px}
+.reg-alert.show{display:flex}
+.reg-alert.warn{background:rgba(255,159,67,.12);border:1px solid rgba(255,159,67,.35);color:#FF9F43}
+.reg-alert.error{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.35);color:#FF6B6B}
+.reg-alert.info{background:rgba(0,210,211,.08);border:1px solid rgba(0,210,211,.3);color:#00D2D3}
+.reg-alert-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.dup-warn{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#FF6B6B;display:none;align-items:center;gap:8px}
+.dup-warn.show{display:flex}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.7px}
+.form-group input{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:#fff;font-family:'Poppins',sans-serif;font-size:13px;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-group input:focus{border-color:#54A0FF;box-shadow:0 0 0 3px rgba(84,160,255,.15)}
+.form-group input.error{border-color:#FF6B6B;box-shadow:0 0 0 3px rgba(255,107,107,.15)}
+.form-group .hint{font-size:10px;color:var(--muted);margin-top:4px}
+.form-group .err-msg{font-size:10px;color:#FF6B6B;margin-top:4px;display:none}
+.form-group input.error ~ .err-msg{display:block}
+.submit-btn{width:100%;background:linear-gradient(135deg,#54A0FF,#5F27CD);color:#fff;border:none;padding:14px;border-radius:13px;font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
+.submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(84,160,255,.35)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.cancel-btn{width:100%;background:transparent;color:var(--muted);border:1px solid var(--border);padding:12px;border-radius:13px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:8px}
+.cancel-btn:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+.modal-success{text-align:center;padding:10px 0 6px}
+.success-icon{font-size:56px;margin-bottom:16px;animation:bounce .5s ease}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.success-title{font-size:22px;font-weight:800;color:#00D2D3;font-family:'Nunito',sans-serif;margin-bottom:6px}
+.success-sub{font-size:13px;color:var(--muted);line-height:1.6}
+.success-detail{background:var(--card2);border-radius:14px;padding:16px;margin:18px 0;text-align:left;font-size:12px}
+.success-detail .row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)}
+.success-detail .row:last-child{border-bottom:none}
+.success-detail .row span:first-child{color:var(--muted)}
+.success-detail .row span:last-child{font-weight:600;color:var(--text)}
+.done-btn{width:100%;background:rgba(0,210,211,.15);color:#00D2D3;border:1px solid rgba(0,210,211,.3);padding:13px;border-radius:13px;font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px}
+.done-btn:hover{background:rgba(0,210,211,.25)}
 
-  /* ── LEGEND ── */
-  .legend {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 600;
-  }
-  .legend-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-  }
+/* ── ADMIN ── */
+#adminPanel{display:none}
+#adminPanel.active{display:block}
+.admin-title{font-size:22px;font-weight:800;font-family:'Nunito',sans-serif;color:#fff}
+.admin-actions{display:flex;gap:10px;flex-wrap:wrap}
+.admin-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.admin-btn.primary{background:linear-gradient(135deg,#54A0FF,#5F27CD);color:#fff}
+.admin-btn.primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(84,160,255,.3)}
+.admin-btn.secondary{background:var(--card2);color:var(--muted);border:1px solid var(--border)}
+.admin-btn.secondary:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+.admin-btn.danger{background:rgba(255,107,107,.12);color:#FF6B6B;border:1px solid rgba(255,107,107,.25)}
+.admin-btn.danger:hover{background:rgba(255,107,107,.22)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:18px 20px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;inset:0;opacity:.05;border-radius:16px}
+.stat-card.blue::before{background:#54A0FF}.stat-card.orange::before{background:#FF9F43}.stat-card.green::before{background:#00D2D3}.stat-card.purple::before{background:#a78bfa}
+.stat-icon{font-size:24px;margin-bottom:8px}
+.stat-val{font-size:32px;font-weight:900;font-family:'Nunito',sans-serif;color:#fff;line-height:1}
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px;font-weight:600}
+.admin-filters{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.admin-search{flex:1;min-width:200px;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px 16px;color:var(--text);font-family:'Poppins',sans-serif;font-size:13px;outline:none}
+.admin-search:focus{border-color:#54A0FF;box-shadow:0 0 0 3px rgba(84,160,255,.12)}
+.admin-filter-select{background:var(--card2);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Poppins',sans-serif;font-size:13px;padding:10px 14px;outline:none;cursor:pointer}
+.activity-group{background:var(--card2);border:1px solid var(--border);border-radius:16px;margin-bottom:12px;overflow:hidden}
+.ag-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;transition:background .15s;justify-content:space-between}
+.ag-header:hover{background:rgba(255,255,255,.03)}
+.ag-left{display:flex;align-items:center;gap:12px}
+.ag-title{font-weight:700;font-size:14px;color:var(--text)}
+.ag-date{font-size:12px;color:var(--muted)}
+.ag-count{background:rgba(84,160,255,.15);color:#54A0FF;border:1px solid rgba(84,160,255,.3);border-radius:20px;padding:2px 12px;font-size:11px;font-weight:700}
+.ag-chevron{color:var(--muted);transition:transform .2s;font-size:18px}
+.ag-chevron.open{transform:rotate(180deg)}
+.ag-body{display:none;border-top:1px solid var(--border)}
+.ag-body.open{display:block}
+.reg-table{width:100%;border-collapse:collapse}
+.reg-table th{padding:10px 16px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border)}
+.reg-table td{padding:10px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
+.reg-table tr:last-child td{border-bottom:none}
+.reg-table tr:hover td{background:rgba(255,255,255,.02)}
+.uid-badge{background:rgba(84,160,255,.1);color:#54A0FF;border:1px solid rgba(84,160,255,.2);border-radius:6px;padding:2px 8px;font-size:10px;font-family:monospace;font-weight:700}
+.del-row-btn{background:rgba(255,107,107,.1);color:#FF6B6B;border:1px solid rgba(255,107,107,.2);border-radius:6px;padding:3px 8px;font-size:10px;cursor:pointer;transition:all .15s}
+.del-row-btn:hover{background:rgba(255,107,107,.25)}
+.ts-text{font-size:10px;color:var(--muted)}
+.empty-state{text-align:center;padding:32px;color:var(--muted);font-size:13px}
+.empty-icon{font-size:36px;margin-bottom:8px;opacity:.5}
 
-  /* ── GRID ── */
-  .schedule-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3px;
-    border-radius: 20px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
+/* ── FIREBASE SETUP WIZARD ── */
+.setup-wizard{margin-top:40px}
+.wizard-title{font-size:20px;font-weight:800;font-family:'Nunito',sans-serif;color:#fff;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.wizard-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.steps-container{display:flex;flex-direction:column;gap:0}
+.setup-step{border:1px solid var(--border);border-radius:0;overflow:hidden;border-bottom:none}
+.setup-step:first-child{border-radius:16px 16px 0 0}
+.setup-step:last-child{border-radius:0 0 16px 16px;border-bottom:1px solid var(--border)}
+.step-header{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;cursor:pointer;transition:background .15s}
+.step-header:hover{background:rgba(255,255,255,.02)}
+.step-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;margin-top:1px}
+.step-num.blue{background:rgba(84,160,255,.2);color:#54A0FF;border:1px solid rgba(84,160,255,.4)}
+.step-num.orange{background:rgba(255,159,67,.2);color:#FF9F43;border:1px solid rgba(255,159,67,.4)}
+.step-num.teal{background:rgba(0,210,211,.2);color:#00D2D3;border:1px solid rgba(0,210,211,.4)}
+.step-num.purple{background:rgba(167,139,250,.2);color:#a78bfa;border:1px solid rgba(167,139,250,.4)}
+.step-num.red{background:rgba(255,107,107,.2);color:#FF6B6B;border:1px solid rgba(255,107,107,.4)}
+.step-num.green{background:rgba(0,210,211,.2);color:#00D2D3;border:1px solid rgba(0,210,211,.4)}
+.step-info{flex:1}
+.step-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.step-chevron{color:var(--muted);font-size:18px;margin-top:4px;transition:transform .2s;flex-shrink:0}
+.step-chevron.open{transform:rotate(180deg)}
+.step-body{display:none;padding:0 20px 20px 64px;border-top:1px solid var(--border)}
+.step-body.open{display:block}
+.step-body p{font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px}
+.step-body p:last-child{margin-bottom:0}
 
-  /* ── DAY HEADER ── */
-  .day-header {
-    padding: 14px 10px 12px;
-    text-align: center;
-    font-weight: 800;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    backdrop-filter: blur(12px);
-  }
-  .day-header.mon { background: linear-gradient(135deg, rgba(255,107,107,0.35), rgba(255,107,107,0.15)); color: #FF6B6B; border-bottom: 2px solid rgba(255,107,107,0.4); }
-  .day-header.tue { background: linear-gradient(135deg, rgba(255,159,67,0.35), rgba(255,159,67,0.15)); color: #FF9F43; border-bottom: 2px solid rgba(255,159,67,0.4); }
-  .day-header.wed { background: linear-gradient(135deg, rgba(84,160,255,0.35), rgba(84,160,255,0.15)); color: #54A0FF; border-bottom: 2px solid rgba(84,160,255,0.4); }
-  .day-header.thu { background: linear-gradient(135deg, rgba(95,39,205,0.35), rgba(95,39,205,0.15)); color: #a78bfa; border-bottom: 2px solid rgba(95,39,205,0.4); }
-  .day-header.fri { background: linear-gradient(135deg, rgba(0,210,211,0.35), rgba(0,210,211,0.15)); color: #00D2D3; border-bottom: 2px solid rgba(0,210,211,0.4); }
+/* code snippet blocks */
+.code-block{background:#0a0f1e;border:1px solid rgba(84,160,255,.2);border-radius:12px;padding:14px 16px;margin:10px 0;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;color:#e2e8f0;position:relative;overflow-x:auto}
+.code-block .cmt{color:var(--muted)}
+.code-block .key{color:#54A0FF}
+.code-block .val{color:#00D2D3}
+.code-block .str{color:#FF9F43}
+.code-block .kw{color:#a78bfa}
+.copy-btn{position:absolute;top:10px;right:10px;background:rgba(84,160,255,.15);color:#54A0FF;border:1px solid rgba(84,160,255,.3);border-radius:7px;padding:3px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s}
+.copy-btn:hover{background:rgba(84,160,255,.3)}
 
-  .day-header .day-name { font-size: 15px; }
-  .day-header .day-cn { font-size: 10px; opacity: 0.7; margin-top: 1px; font-weight: 600; letter-spacing: 1px; }
+/* inline code */
+code{background:rgba(255,255,255,.08);color:#FF9F43;padding:2px 6px;border-radius:5px;font-family:'Courier New',monospace;font-size:11px}
 
-  /* ── WEEK ROWS ── */
-  .week-row { display: contents; }
-  .week-row.hidden { display: none; }
+/* nav links inside wizard */
+.step-link{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#54A0FF,#5F27CD);color:#fff;border:none;padding:9px 18px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;margin-top:8px;transition:all .15s}
+.step-link:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(84,160,255,.3)}
+.step-link.outline{background:transparent;color:#54A0FF;border:1px solid rgba(84,160,255,.4)}
+.step-link.outline:hover{background:rgba(84,160,255,.1)}
 
-  /* ── WEEK LABEL ── */
-  .week-label-row { display: contents; }
-  .week-label {
-    grid-column: 1 / -1;
-    padding: 8px 16px;
-    background: rgba(255,255,255,0.03);
-    border-top: 1px solid var(--border);
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .week-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+/* rules block */
+.rules-block{background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.25);border-radius:12px;padding:16px;margin:12px 0}
+.rules-block .rb-title{font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 
-  /* ── DAY CELL ── */
-  .day-cell {
-    background: var(--card);
-    padding: 10px 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-height: 140px;
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    transition: background 0.2s;
-  }
-  .day-cell:last-child { border-right: none; }
-  .day-cell.mon { border-left: 3px solid rgba(255,107,107,0.3); }
-  .day-cell.tue { border-left: 3px solid rgba(255,159,67,0.3); }
-  .day-cell.wed { border-left: 3px solid rgba(84,160,255,0.3); }
-  .day-cell.thu { border-left: 3px solid rgba(95,39,205,0.3); }
-  .day-cell.fri { border-left: 3px solid rgba(0,210,211,0.3); }
-  .day-cell.empty { background: rgba(255,255,255,0.01); }
-  .day-cell.focused {
-    background: rgba(255,255,255,0.05);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
-  }
+/* warning / tip boxes */
+.tip-box{border-radius:12px;padding:12px 14px;margin:12px 0;font-size:12px;line-height:1.6;display:flex;gap:10px}
+.tip-box.warn{background:rgba(255,159,67,.1);border:1px solid rgba(255,159,67,.3);color:#FF9F43}
+.tip-box.info{background:rgba(84,160,255,.08);border:1px solid rgba(84,160,255,.25);color:#54A0FF}
+.tip-box.success{background:rgba(0,210,211,.08);border:1px solid rgba(0,210,211,.25);color:#00D2D3}
+.tip-box-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.tip-box-text{flex:1}
 
-  /* ── ACTIVITY CARD ── */
-  .activity {
-    border-radius: 10px;
-    padding: 8px 9px;
-    cursor: pointer;
-    position: relative;
-    transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s ease;
-    overflow: visible;
-    z-index: 1;
-  }
-  .activity:hover {
-    transform: translateY(-3px) scale(1.02);
-    z-index: 100;
-  }
-  .activity.mon { background: linear-gradient(135deg, rgba(255,107,107,0.18), rgba(255,107,107,0.08)); border: 1px solid rgba(255,107,107,0.25); }
-  .activity.mon:hover { box-shadow: 0 8px 28px rgba(255,107,107,0.35); border-color: rgba(255,107,107,0.6); }
-  .activity.tue { background: linear-gradient(135deg, rgba(255,159,67,0.18), rgba(255,159,67,0.08)); border: 1px solid rgba(255,159,67,0.25); }
-  .activity.tue:hover { box-shadow: 0 8px 28px rgba(255,159,67,0.35); border-color: rgba(255,159,67,0.6); }
-  .activity.wed { background: linear-gradient(135deg, rgba(84,160,255,0.18), rgba(84,160,255,0.08)); border: 1px solid rgba(84,160,255,0.25); }
-  .activity.wed:hover { box-shadow: 0 8px 28px rgba(84,160,255,0.35); border-color: rgba(84,160,255,0.6); }
-  .activity.thu { background: linear-gradient(135deg, rgba(95,39,205,0.18), rgba(95,39,205,0.08)); border: 1px solid rgba(95,39,205,0.3); }
-  .activity.thu:hover { box-shadow: 0 8px 28px rgba(95,39,205,0.4); border-color: rgba(95,39,205,0.7); }
-  .activity.fri { background: linear-gradient(135deg, rgba(0,210,211,0.18), rgba(0,210,211,0.08)); border: 1px solid rgba(0,210,211,0.25); }
-  .activity.fri:hover { box-shadow: 0 8px 28px rgba(0,210,211,0.35); border-color: rgba(0,210,211,0.6); }
+/* config input area in wizard */
+.config-input-area{background:var(--card2);border:1px solid rgba(84,160,255,.25);border-radius:14px;padding:18px;margin:12px 0}
+.config-input-area .ci-title{font-size:12px;font-weight:700;color:#54A0FF;margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px}
+.ci-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.ci-field label{font-size:10px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.ci-field input{width:100%;background:var(--card3);border:1px solid var(--border);border-radius:9px;padding:9px 12px;color:#fff;font-family:'Courier New',monospace;font-size:11px;outline:none;transition:border-color .15s}
+.ci-field input:focus{border-color:#54A0FF;box-shadow:0 0 0 2px rgba(84,160,255,.12)}
+.ci-field input.full{grid-column:1/-1}
+.save-config-btn{width:100%;background:linear-gradient(135deg,#54A0FF,#5F27CD);color:#fff;border:none;padding:11px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;transition:all .2s}
+.save-config-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(84,160,255,.3)}
 
-  .activity-name {
-    font-size: 11.5px;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--text);
-  }
-  .activity-cn {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 1px;
-    line-height: 1.3;
-  }
-  .activity-time {
-    font-size: 10px;
-    font-weight: 600;
-    margin-top: 3px;
-    opacity: 0.8;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .activity.mon .activity-time { color: #FF6B6B; }
-  .activity.tue .activity-time { color: #FF9F43; }
-  .activity.wed .activity-time { color: #54A0FF; }
-  .activity.thu .activity-time { color: #a78bfa; }
-  .activity.fri .activity-time { color: #00D2D3; }
+/* ADMIN LOCK */
+.admin-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center}
+.lock-icon{font-size:48px;margin-bottom:16px}
+.lock-title{font-size:20px;font-weight:800;font-family:'Nunito',sans-serif;margin-bottom:8px}
+.lock-form{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+.lock-input{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:11px 18px;color:var(--text);font-family:'Poppins',sans-serif;font-size:13px;outline:none;min-width:200px}
+.lock-input:focus{border-color:#54A0FF}
+.lock-btn{background:linear-gradient(135deg,#54A0FF,#5F27CD);color:#fff;border:none;padding:11px 24px;border-radius:12px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
 
-  .activity-venue {
-    font-size: 9.5px;
-    color: var(--muted);
-    margin-top: 2px;
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: opacity 0.2s, max-height 0.2s;
-  }
-  .activity:hover .activity-venue {
-    opacity: 1;
-    max-height: 30px;
-  }
-  .activity-reg {
-    font-size: 9px;
-    color: rgba(255,200,100,0.7);
-    margin-top: 2px;
-    font-style: italic;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-  .activity:hover .activity-reg { opacity: 1; }
+/* FOOTER */
+.footer-notes{margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.note-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;font-size:12px;line-height:1.6;color:var(--muted)}
+.note-card strong{color:var(--text);display:block;margin-bottom:4px;font-size:13px}
+.note-card .zh{font-size:11px;color:rgba(255,255,255,.25);margin-top:4px}
 
-  /* ── TOOLTIP ── */
-  .tooltip {
-    display: none;
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(20,20,35,0.97);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 12px;
-    padding: 12px 14px;
-    min-width: 180px;
-    max-width: 220px;
-    z-index: 999;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    pointer-events: none;
-    backdrop-filter: blur(20px);
-  }
-  .activity:hover .tooltip { display: block; }
-  .tooltip-title { font-size: 12px; font-weight: 700; color: white; margin-bottom: 6px; line-height: 1.3; }
-  .tooltip-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); margin-bottom: 3px; }
-  .tooltip-row span:first-child { font-size: 13px; }
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;padding:13px 22px;border-radius:13px;font-weight:600;font-size:13px;transform:translateY(80px);transition:transform .3s ease;z-index:2000;display:flex;align-items:center;gap:8px;box-shadow:0 8px 28px rgba(0,0,0,.4)}
+.toast.show{transform:translateY(0)}
+.toast.success{background:#00D2D3;color:#fff}
+.toast.error{background:#FF6B6B;color:#fff}
+.toast.info{background:#54A0FF;color:#fff}
+.toast.warn{background:#FF9F43;color:#fff}
 
-  /* ── DATE CHIP ── */
-  .date-chip {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--muted);
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-    opacity: 0.7;
-  }
+/* loading overlay */
+.loading-bar{height:3px;background:linear-gradient(90deg,#54A0FF,#00D2D3);position:fixed;top:0;left:0;z-index:9999;transition:width .3s;width:0}
 
-  /* ── FOOTER ── */
-  .footer-notes {
-    margin-top: 28px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 12px;
-  }
-  .note-card {
-    background: var(--card2);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px 18px;
-    font-size: 12px;
-    line-height: 1.6;
-    color: var(--muted);
-  }
-  .note-card strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 13px; }
-  .note-card .zh { font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 4px; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    .schedule-grid { grid-template-columns: repeat(3, 1fr); }
-    .day-header.thu, .day-cell.thu { display: none; }
-    .day-header.fri, .day-cell.fri { display: none; }
-  }
-  @media (max-width: 520px) {
-    .schedule-grid { grid-template-columns: 1fr 1fr; }
-    .day-header.wed, .day-cell.wed { display: none; }
-  }
-
-  /* ── PULSE ANIMATION ── */
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(84,160,255,0); }
-    50% { box-shadow: 0 0 0 4px rgba(84,160,255,0.15); }
-  }
-  .activity.special { animation: pulse-glow 2.5s ease infinite; }
-
-  /* ── FADE IN ── */
-  @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .day-cell { animation: fadeSlideUp 0.5s ease both; }
-  .day-cell:nth-child(5n+1) { animation-delay: 0.05s; }
-  .day-cell:nth-child(5n+2) { animation-delay: 0.10s; }
-  .day-cell:nth-child(5n+3) { animation-delay: 0.15s; }
-  .day-cell:nth-child(5n+4) { animation-delay: 0.20s; }
-  .day-cell:nth-child(5n+5) { animation-delay: 0.25s; }
+@media(max-width:768px){.schedule-grid{grid-template-columns:repeat(3,1fr)}.day-header-cell.thu,.day-col.thu,.day-header-cell.fri,.day-col.fri{display:none}.info-row{grid-template-columns:1fr 1fr}.ci-row{grid-template-columns:1fr}}
+@media(max-width:520px){.schedule-grid{grid-template-columns:1fr 1fr}.day-header-cell.wed,.day-col.wed{display:none}.info-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<div class="loading-bar" id="loadingBar"></div>
 <div class="wrapper">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="header-badge">🏥 Kwong Wai Shiu Hospital</div>
-    <h1>KWSC @ McNair<br>March 2026</h1>
-    <div class="subtitle">Active Ageing Programme Schedule · 三月活动表</div>
-    <div class="chinese">联络号码: 6422 1311 &nbsp;|&nbsp; 8028 1247</div>
-    <div class="notice-bar"><span>🍽️</span> Closed during lunch · 午餐时间关闭 · 12PM – 1PM</div>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">🏥 Kwong Wai Shiu Hospital</div>
+  <h1>KWSC @ McNair<br>March 2026</h1>
+  <div class="subtitle">Active Ageing Programme — Activity Registration · 活动报名</div>
+  <div style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap">
+    <div class="notice-bar">🍽️ Closed during lunch · 12PM–1PM &nbsp;|&nbsp; 📝 Registration opens 1 week before activity</div>
+    <div class="fb-status connecting" id="fbStatusPill"><span class="fb-dot"></span><span id="fbStatusText">Connecting…</span></div>
   </div>
+</div>
 
-  <!-- CONTROLS -->
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('schedule',this)">📅 Schedule &amp; Register</button>
+  <button class="tab-btn" onclick="switchTab('admin',this)">🔐 Admin Dashboard <span class="badge" id="totalBadge">0</span></button>
+</div>
+
+<!-- ══ SCHEDULE TAB ══ -->
+<div id="scheduleTab">
   <div class="controls">
     <label>View Week:</label>
     <select class="week-select" id="weekSelect" onchange="filterWeek(this.value)">
@@ -433,815 +333,963 @@
       <option value="4">Week 4 · Mar 24 – 28</option>
       <option value="5">Week 5 · Mar 30 – 31</option>
     </select>
-    <button class="view-all-btn" onclick="filterWeek('all')">Show All</button>
   </div>
-
-  <!-- LEGEND -->
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#FF6B6B"></div>Monday</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#FF9F43"></div>Tuesday</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#54A0FF"></div>Wednesday</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Thursday</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#00D2D3"></div>Friday</div>
+  <div class="schedule-grid" id="scheduleGrid">
+    <div class="day-header-cell mon"><div class="dn">Monday</div><div class="dc">星期一</div></div>
+    <div class="day-header-cell tue"><div class="dn">Tuesday</div><div class="dc">星期二</div></div>
+    <div class="day-header-cell wed"><div class="dn">Wednesday</div><div class="dc">星期三</div></div>
+    <div class="day-header-cell thu"><div class="dn">Thursday</div><div class="dc">星期四</div></div>
+    <div class="day-header-cell fri"><div class="dn">Friday</div><div class="dc">星期五</div></div>
   </div>
-
-  <!-- SCHEDULE GRID -->
-  <div class="schedule-grid" id="grid">
-
-    <!-- DAY HEADERS -->
-    <div class="day-header mon"><div class="day-name">Monday</div><div class="day-cn">星期一</div></div>
-    <div class="day-header tue"><div class="day-name">Tuesday</div><div class="day-cn">星期二</div></div>
-    <div class="day-header wed"><div class="day-name">Wednesday</div><div class="day-cn">星期三</div></div>
-    <div class="day-header thu"><div class="day-name">Thursday</div><div class="day-cn">星期四</div></div>
-    <div class="day-header fri"><div class="day-name">Friday</div><div class="day-cn">星期五</div></div>
-
-    <!-- ═══════════ WEEK 1 ═══════════ -->
-    <div class="week-label" data-week="1">Week 1 &nbsp;·&nbsp; 2–7 March 2026</div>
-
-    <!-- MON 02/03 -->
-    <div class="day-cell mon" data-week="1">
-      <div class="date-chip">02 Mar</div>
-      <div class="activity mon special">
-        <div class="activity-name">Daily Socialising Activities</div>
-        <div class="activity-cn">每日社交活动</div>
-        <div class="activity-time">🕐 All day</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Daily Socialising Activities</div>
-          <div class="tooltip-row"><span>🕐</span> All Day</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity mon">
-        <div class="activity-name">SOTA Student Engagement</div>
-        <div class="activity-cn">新加坡艺术学院</div>
-        <div class="activity-time">🕐 3.15–4.45pm</div>
-        <div class="activity-venue">📍 McNair Centre</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">SOTA Student Engagement</div>
-          <div class="tooltip-row"><span>🕒</span> 3.15pm – 4.45pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration required</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TUE 03/03 -->
-    <div class="day-cell tue" data-week="1">
-      <div class="date-chip">03 Mar</div>
-      <div class="activity tue">
-        <div class="activity-name">Chair Exercise</div>
-        <div class="activity-cn">椅子运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Exercise</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity tue">
-        <div class="activity-name">NUS Student Engagement</div>
-        <div class="activity-cn">国大学生交流活动</div>
-        <div class="activity-time">🕐 2.30–3.30pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">NUS Student Engagement</div>
-          <div class="tooltip-row"><span>🕑</span> 2:30pm – 3:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- WED 04/03 -->
-    <div class="day-cell wed" data-week="1">
-      <div class="date-chip">04 Mar</div>
-      <div class="activity wed">
-        <div class="activity-name">Chair Zumba</div>
-        <div class="activity-cn">座椅尊巴</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 113 Indoor</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Zumba</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 113 Indoor</div>
-        </div>
-      </div>
-      <div class="activity wed">
-        <div class="activity-name">Ukulele Class</div>
-        <div class="activity-cn">尤克里里</div>
-        <div class="activity-time">🕐 2.00–3.30pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Ukulele Class 尤克里里</div>
-          <div class="tooltip-row"><span>🕑</span> 2:00pm – 3:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- THU 05/03 -->
-    <div class="day-cell thu" data-week="1">
-      <div class="date-chip">05 Mar</div>
-      <div class="activity thu">
-        <div class="activity-name">Low Impact Aerobics (HPB)</div>
-        <div class="activity-cn">低冲击有氧运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 114 Pavilion</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Low Impact Aerobics (HPB)</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 114 Pavilion</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-      <div class="activity thu">
-        <div class="activity-name">Sand Art Air Plant Terrarium</div>
-        <div class="activity-cn">彩砂空气草盆景</div>
-        <div class="activity-time">🕐 2–4pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Sand Art Air Plant Terrarium</div>
-          <div class="tooltip-row"><span>🕑</span> 2:00pm – 4:00pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FRI 06/03 -->
-    <div class="day-cell fri" data-week="1">
-      <div class="date-chip">06 Mar</div>
-      <div class="activity fri">
-        <div class="activity-name">Chair Zumba (HPB)</div>
-        <div class="activity-cn">座椅尊巴</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 114 Pavilion</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Zumba (HPB)</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 114 Pavilion</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-      <div class="activity fri">
-        <div class="activity-name">BINGO</div>
-        <div class="activity-cn">宾果游戏</div>
-        <div class="activity-time">🕐 1.30–2.30pm</div>
-        <div class="tooltip">
-          <div class="tooltip-title">BINGO 宾果游戏</div>
-          <div class="tooltip-row"><span>🕑</span> 1:30pm – 2:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity fri">
-        <div class="activity-name">NUS Student Engagement</div>
-        <div class="activity-cn">国大学生交流活动</div>
-        <div class="activity-time">🕐 2.45–4.15pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">NUS Student Engagement</div>
-          <div class="tooltip-row"><span>🕑</span> 2:45pm – 4:15pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════════ WEEK 2 ═══════════ -->
-    <div class="week-label" data-week="2">Week 2 &nbsp;·&nbsp; 9–14 March 2026</div>
-
-    <!-- MON 09/03 -->
-    <div class="day-cell mon" data-week="2">
-      <div class="date-chip">09 Mar</div>
-      <div class="activity mon">
-        <div class="activity-name">Resistance Band Exercise</div>
-        <div class="activity-cn">拉力带运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Resistance Band Exercise</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity mon special">
-        <div class="activity-name">Daily Socialising Activities</div>
-        <div class="activity-cn">每日社交活动</div>
-        <div class="activity-time">🕐 All day</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Daily Socialising Activities</div>
-          <div class="tooltip-row"><span>🕐</span> All Day</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TUE 10/03 -->
-    <div class="day-cell tue" data-week="2">
-      <div class="date-chip">10 Mar</div>
-      <div class="activity tue">
-        <div class="activity-name">Fitness Exercise</div>
-        <div class="activity-cn">健身运动</div>
-        <div class="activity-time">🕐 9–10am</div>
-        <div class="activity-venue">📍 Blk 122 Pavilion</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Fitness Exercise 健身运动</div>
-          <div class="tooltip-row"><span>🕘</span> 9:00am – 10:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 122 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity tue">
-        <div class="activity-name">Chair Exercise</div>
-        <div class="activity-cn">椅子运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Exercise</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity tue">
-        <div class="activity-name">NUS Student Engagement</div>
-        <div class="activity-cn">国大学生交流活动</div>
-        <div class="activity-time">🕐 2.30–3.30pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">NUS Student Engagement</div>
-          <div class="tooltip-row"><span>🕑</span> 2:30pm – 3:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- WED 11/03 -->
-    <div class="day-cell wed" data-week="2">
-      <div class="date-chip">11 Mar</div>
-      <div class="activity wed">
-        <div class="activity-name">Chair Zumba</div>
-        <div class="activity-cn">座椅尊巴</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 113 Indoor</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Zumba</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 113 Indoor</div>
-        </div>
-      </div>
-      <div class="activity wed special">
-        <div class="activity-name">Drum Alive (Trial Class)</div>
-        <div class="activity-time">🕐 10am–11.30am</div>
-        <div class="activity-venue">📍 KWSC @ SG</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">🥁 Drum Alive Trial Class</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:30am</div>
-          <div class="tooltip-row"><span>📍</span> KWSC @ SG</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- THU 12/03 -->
-    <div class="day-cell thu" data-week="2">
-      <div class="date-chip">12 Mar</div>
-      <div class="activity thu">
-        <div class="activity-name">Low Impact Aerobics (HPB)</div>
-        <div class="activity-cn">低冲击有氧运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 114 Pavilion</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Low Impact Aerobics (HPB)</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 114 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity thu special">
-        <div class="activity-name">HAPPY Programme</div>
-        <div class="activity-cn">Pre-MoCA</div>
-        <div class="activity-time">🕐 1–2pm</div>
-        <div class="tooltip">
-          <div class="tooltip-title">HAPPY Programme (Pre-MoCA)</div>
-          <div class="tooltip-row"><span>🕐</span> 1:00pm – 2:00pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity thu special">
-        <div class="activity-name">HAPPY Programme</div>
-        <div class="activity-time">🕐 2–3pm</div>
-        <div class="tooltip">
-          <div class="tooltip-title">HAPPY Programme</div>
-          <div class="tooltip-row"><span>🕑</span> 2:00pm – 3:00pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity thu">
-        <div class="activity-name">TCM Talk: Health Soup</div>
-        <div class="activity-cn">中医讲座</div>
-        <div class="activity-time">🕐 3–5pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">TCM Talk: Health Soup 中医讲座</div>
-          <div class="tooltip-row"><span>🕒</span> 3:00pm – 5:00pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FRI 13/03 -->
-    <div class="day-cell fri" data-week="2">
-      <div class="date-chip">13 Mar</div>
-      <div class="activity fri">
-        <div class="activity-name">Chair Zumba (HPB)</div>
-        <div class="activity-cn">座椅尊巴</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 114 Pavilion</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Zumba (HPB)</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 114 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity fri">
-        <div class="activity-name">BINGO</div>
-        <div class="activity-cn">宾果游戏</div>
-        <div class="activity-time">🕐 1.30–2.30pm</div>
-        <div class="tooltip">
-          <div class="tooltip-title">BINGO 宾果游戏</div>
-          <div class="tooltip-row"><span>🕑</span> 1:30pm – 2:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity fri">
-        <div class="activity-name">NUS Student Engagement</div>
-        <div class="activity-cn">国大学生交流活动</div>
-        <div class="activity-time">🕐 2.45–4.15pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">NUS Student Engagement</div>
-          <div class="tooltip-row"><span>🕑</span> 2:45pm – 4:15pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════════ WEEK 3 ═══════════ -->
-    <div class="week-label" data-week="3">Week 3 &nbsp;·&nbsp; 17–21 March 2026</div>
-
-    <!-- MON 17/03 -->
-    <div class="day-cell mon" data-week="3">
-      <div class="date-chip">17 Mar</div>
-      <div class="activity mon">
-        <div class="activity-name">Community Health Post (TTSH)</div>
-        <div class="activity-cn">社区护士站</div>
-        <div class="activity-time">🕐 2–5pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Community Health Post (TTSH)</div>
-          <div class="tooltip-row"><span>🕑</span> 2:00pm – 5:00pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-      <div class="activity mon special">
-        <div class="activity-name">Feb Birthday King & Queen</div>
-        <div class="activity-cn">国王后的生日 (二月)</div>
-        <div class="activity-time">🕐 2.30–4.30pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">🎂 Feb Birthday King & Queen</div>
-          <div class="tooltip-row"><span>🕑</span> 2:30pm – 4:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TUE 18/03 -->
-    <div class="day-cell tue" data-week="3">
-      <div class="date-chip">18 Mar</div>
-      <div class="activity tue">
-        <div class="activity-name">Fitness Exercise</div>
-        <div class="activity-cn">健身运动</div>
-        <div class="activity-time">🕐 9–10am</div>
-        <div class="activity-venue">📍 Blk 122 Pavilion</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Fitness Exercise</div>
-          <div class="tooltip-row"><span>🕘</span> 9:00am – 10:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 122 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity tue">
-        <div class="activity-name">Chair Exercise</div>
-        <div class="activity-cn">椅子运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Exercise</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity tue">
-        <div class="activity-name">NUS Student Engagement</div>
-        <div class="activity-cn">国大学生交流活动</div>
-        <div class="activity-time">🕐 2.30–3.30pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">NUS Student Engagement</div>
-          <div class="tooltip-row"><span>🕑</span> 2:30pm – 3:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- WED 19/03 -->
-    <div class="day-cell wed" data-week="3">
-      <div class="date-chip">19 Mar (18/03 actual)</div>
-      <div class="activity wed">
-        <div class="activity-name">Chair Zumba</div>
-        <div class="activity-cn">座椅尊巴</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 113 Indoor</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Zumba</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 113 Indoor</div>
-        </div>
-      </div>
-      <div class="activity wed special">
-        <div class="activity-name">SG Digital (IMDA)</div>
-        <div class="activity-cn">数码科技</div>
-        <div class="activity-time">🕐 10am–12pm (Group)</div>
-        <div class="activity-venue">📍 1-to-1: 1–4pm</div>
-        <div class="tooltip">
-          <div class="tooltip-title">SG Digital (IMDA) 数码科技</div>
-          <div class="tooltip-row"><span>🕙</span> Group: 10:00am – 12:00pm</div>
-          <div class="tooltip-row"><span>🕐</span> 1-to-1: 1:00pm – 4:00pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity wed">
-        <div class="activity-name">Ukulele Class</div>
-        <div class="activity-cn">尤克里里</div>
-        <div class="activity-time">🕐 2.00–3.30pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Ukulele Class 尤克里里</div>
-          <div class="tooltip-row"><span>🕑</span> 2:00pm – 3:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- THU 19/03 -->
-    <div class="day-cell thu" data-week="3">
-      <div class="date-chip">19 Mar</div>
-      <div class="activity thu">
-        <div class="activity-name">Low Impact Aerobics (HPB)</div>
-        <div class="activity-cn">低冲击有氧运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 114 Pavilion</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Low Impact Aerobics (HPB)</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 114 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity thu special">
-        <div class="activity-name">HAPPY Programme</div>
-        <div class="activity-time">🕐 2–3pm</div>
-        <div class="tooltip">
-          <div class="tooltip-title">HAPPY Programme</div>
-          <div class="tooltip-row"><span>🕑</span> 2:00pm – 3:00pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FRI 20/03 -->
-    <div class="day-cell fri" data-week="3">
-      <div class="date-chip">20 Mar</div>
-      <div class="activity fri">
-        <div class="activity-name">Chair Zumba (HPB)</div>
-        <div class="activity-cn">座椅尊巴</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 114 Pavilion</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Zumba (HPB)</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 114 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity fri">
-        <div class="activity-name">BINGO</div>
-        <div class="activity-cn">宾果游戏</div>
-        <div class="activity-time">🕐 1.30–2.30pm</div>
-        <div class="tooltip">
-          <div class="tooltip-title">BINGO 宾果游戏</div>
-          <div class="tooltip-row"><span>🕑</span> 1:30pm – 2:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity fri">
-        <div class="activity-name">NUS Student Engagement</div>
-        <div class="activity-cn">国大学生交流活动</div>
-        <div class="activity-time">🕐 2.45–4.15pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">NUS Student Engagement</div>
-          <div class="tooltip-row"><span>🕑</span> 2:45pm – 4:15pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════════ WEEK 4 ═══════════ -->
-    <div class="week-label" data-week="4">Week 4 &nbsp;·&nbsp; 24–28 March 2026</div>
-
-    <!-- MON 24/03 -->
-    <div class="day-cell mon" data-week="4">
-      <div class="date-chip">24 Mar</div>
-      <div class="activity mon">
-        <div class="activity-name">Resistance Band Exercise</div>
-        <div class="activity-cn">拉力带运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Resistance Band Exercise</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity mon special">
-        <div class="activity-name">Daily Socialising Activities</div>
-        <div class="activity-cn">每日社交活动</div>
-        <div class="activity-time">🕐 All day</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Daily Socialising Activities</div>
-          <div class="tooltip-row"><span>🕐</span> All Day</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TUE 25/03 -->
-    <div class="day-cell tue" data-week="4">
-      <div class="date-chip">25 Mar</div>
-      <div class="activity tue">
-        <div class="activity-name">Fitness Exercise</div>
-        <div class="activity-cn">健身运动</div>
-        <div class="activity-time">🕐 9–10am</div>
-        <div class="activity-venue">📍 Blk 122 Pavilion</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Fitness Exercise</div>
-          <div class="tooltip-row"><span>🕘</span> 9:00am – 10:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 122 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity tue">
-        <div class="activity-name">Chair Exercise</div>
-        <div class="activity-cn">椅子运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Exercise</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity tue">
-        <div class="activity-name">NUS Student Engagement</div>
-        <div class="activity-cn">国大学生交流活动</div>
-        <div class="activity-time">🕐 2.30–3.30pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">NUS Student Engagement</div>
-          <div class="tooltip-row"><span>🕑</span> 2:30pm – 3:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- WED 25/03 -->
-    <div class="day-cell wed" data-week="4">
-      <div class="date-chip">25 Mar</div>
-      <div class="activity wed">
-        <div class="activity-name">Chair Zumba</div>
-        <div class="activity-cn">座椅尊巴</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 113 Indoor</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Zumba</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 113 Indoor</div>
-        </div>
-      </div>
-      <div class="activity wed special">
-        <div class="activity-name">Daily Socialising Activities</div>
-        <div class="activity-cn">每日社交活动</div>
-        <div class="activity-time">🕐 All day</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Daily Socialising Activities</div>
-          <div class="tooltip-row"><span>🕐</span> All Day</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- THU 26/03 -->
-    <div class="day-cell thu" data-week="4">
-      <div class="date-chip">26 Mar</div>
-      <div class="activity thu">
-        <div class="activity-name">Low Impact Aerobics (HPB)</div>
-        <div class="activity-cn">低冲击有氧运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 114 Pavilion</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Low Impact Aerobics (HPB)</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 114 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity thu special">
-        <div class="activity-name">HAPPY Programme</div>
-        <div class="activity-time">🕐 2–3pm</div>
-        <div class="tooltip">
-          <div class="tooltip-title">HAPPY Programme</div>
-          <div class="tooltip-row"><span>🕑</span> 2:00pm – 3:00pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FRI 27/03 -->
-    <div class="day-cell fri" data-week="4">
-      <div class="date-chip">27 Mar</div>
-      <div class="activity fri">
-        <div class="activity-name">Chair Zumba (HPB)</div>
-        <div class="activity-cn">座椅尊巴</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="activity-venue">📍 Blk 114 Pavilion</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Zumba (HPB)</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 114 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity fri">
-        <div class="activity-name">BINGO</div>
-        <div class="activity-cn">宾果游戏</div>
-        <div class="activity-time">🕐 1.30–2.30pm</div>
-        <div class="tooltip">
-          <div class="tooltip-title">BINGO 宾果游戏</div>
-          <div class="tooltip-row"><span>🕑</span> 1:30pm – 2:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity fri">
-        <div class="activity-name">NUS Student Engagement</div>
-        <div class="activity-cn">国大学生交流活动</div>
-        <div class="activity-time">🕐 2.45–4.15pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">NUS Student Engagement</div>
-          <div class="tooltip-row"><span>🕑</span> 2:45pm – 4:15pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══════════ WEEK 5 ═══════════ -->
-    <div class="week-label" data-week="5">Week 5 &nbsp;·&nbsp; 30–31 March 2026</div>
-
-    <!-- MON 30/03 -->
-    <div class="day-cell mon" data-week="5">
-      <div class="date-chip">30 Mar</div>
-      <div class="activity mon special">
-        <div class="activity-name">Daily Socialising Activities</div>
-        <div class="activity-cn">每日社交活动</div>
-        <div class="activity-time">🕐 All day</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Daily Socialising Activities</div>
-          <div class="tooltip-row"><span>🕐</span> All Day</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity mon">
-        <div class="activity-name">SOTA Student Engagement</div>
-        <div class="activity-cn">新加坡艺术学院</div>
-        <div class="activity-time">🕐 3.15–4.45pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">SOTA Student Engagement</div>
-          <div class="tooltip-row"><span>🕒</span> 3:15pm – 4:45pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TUE 31/03 -->
-    <div class="day-cell tue" data-week="5">
-      <div class="date-chip">31 Mar</div>
-      <div class="activity tue">
-        <div class="activity-name">Fitness Exercise</div>
-        <div class="activity-cn">健身运动</div>
-        <div class="activity-time">🕐 9–10am</div>
-        <div class="activity-venue">📍 Blk 122 Pavilion</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Fitness Exercise</div>
-          <div class="tooltip-row"><span>🕘</span> 9:00am – 10:00am</div>
-          <div class="tooltip-row"><span>📍</span> Blk 122 Pavilion</div>
-        </div>
-      </div>
-      <div class="activity tue">
-        <div class="activity-name">Chair Exercise</div>
-        <div class="activity-cn">椅子运动</div>
-        <div class="activity-time">🕐 10–11am</div>
-        <div class="tooltip">
-          <div class="tooltip-title">Chair Exercise</div>
-          <div class="tooltip-row"><span>🕙</span> 10:00am – 11:00am</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity tue">
-        <div class="activity-name">NUS Student Engagement</div>
-        <div class="activity-cn">国大学生交流活动</div>
-        <div class="activity-time">🕐 2.30–3.30pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">NUS Student Engagement</div>
-          <div class="tooltip-row"><span>🕑</span> 2:30pm – 3:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-        </div>
-      </div>
-      <div class="activity tue special">
-        <div class="activity-name">March Birthday King & Queen</div>
-        <div class="activity-cn">国王后的生日 (三月)</div>
-        <div class="activity-time">🕐 2.30–4.30pm</div>
-        <div class="activity-reg">⚠️ By registration</div>
-        <div class="tooltip">
-          <div class="tooltip-title">🎂 March Birthday King & Queen</div>
-          <div class="tooltip-row"><span>🕑</span> 2:30pm – 4:30pm</div>
-          <div class="tooltip-row"><span>📍</span> McNair Centre</div>
-          <div class="tooltip-row"><span>✏️</span> By registration</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- WED, THU, FRI — empty for week 5 -->
-    <div class="day-cell wed empty" data-week="5"></div>
-    <div class="day-cell thu empty" data-week="5"></div>
-    <div class="day-cell fri empty" data-week="5"></div>
-
-  </div><!-- end grid -->
-
-  <!-- FOOTER NOTES -->
   <div class="footer-notes">
-    <div class="note-card">
-      <strong>📍 Venue</strong>
-      All activities are held at McNair Centre unless otherwise stated.
-      <div class="zh">除非另有说明，所有活动均在 McNair 中心举行</div>
-    </div>
-    <div class="note-card">
-      <strong>📝 Registration</strong>
-      Activity registration is open 1 week in advance: Mon–Fri, 9am–5pm.
-      <div class="zh">本中心活动报名时间只在一个礼拜前开始：星期一 至 星期五，早上9点 至 下午5点</div>
-    </div>
-    <div class="note-card">
-      <strong>🧠 Cognitive Games</strong>
-      Cognitive Games at Centre every Mon–Fri.
-      <div class="zh">认知游戏在中心 | 每星期一 至 星期五</div>
+    <div class="note-card"><strong>📍 Venue</strong>All activities at McNair Centre unless stated.<div class="zh">除非另有说明，所有活动均在 McNair 中心举行</div></div>
+    <div class="note-card"><strong>📝 Registration</strong>Open 1 week in advance: Mon–Fri, 9am–5pm.<div class="zh">本中心活动报名时间只在一个礼拜前开始：星期一 至 星期五，早上9点 至 下午5点</div></div>
+    <div class="note-card"><strong>🧠 Cognitive Games</strong>At Centre every Mon–Fri.<div class="zh">认知游戏在中心 | 每星期一 至 星期五</div></div>
+  </div>
+</div>
+
+<!-- ══ ADMIN TAB ══ -->
+<div id="adminTab" style="display:none">
+  <div id="adminLock">
+    <div class="admin-lock">
+      <div class="lock-icon">🔐</div>
+      <div class="lock-title">Admin Access</div>
+      <div style="color:var(--muted);font-size:13px">Enter the admin password to view registrations</div>
+      <div class="lock-form">
+        <input class="lock-input" type="password" id="adminPwdInput" placeholder="Password" onkeydown="if(event.key==='Enter')checkAdmin()">
+        <button class="lock-btn" onclick="checkAdmin()">Unlock →</button>
+      </div>
+      <div id="pwdErr" style="color:#FF6B6B;font-size:12px;margin-top:10px;display:none">Incorrect password</div>
     </div>
   </div>
 
-</div><!-- end wrapper -->
+  <div id="adminPanel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+      <div class="admin-title">📊 Registration Dashboard</div>
+      <div class="admin-actions">
+        <button class="admin-btn primary" onclick="exportCSV()">⬇ Export CSV</button>
+        <button class="admin-btn secondary" onclick="refreshAdmin()">🔄 Refresh</button>
+        <button class="admin-btn danger" onclick="clearAllConfirm()">🗑 Clear All</button>
+      </div>
+    </div>
+    <div class="stats-grid" id="statsGrid"></div>
+    <div class="admin-filters">
+      <input class="admin-search" type="text" id="adminSearch" placeholder="🔍  Search by name, User ID or activity…" oninput="renderAdmin()">
+      <select class="admin-filter-select" id="actFilter" onchange="renderAdmin()"><option value="all">All Activities</option></select>
+      <select class="admin-filter-select" id="weekFilter" onchange="renderAdmin()">
+        <option value="all">All Weeks</option>
+        <option value="1">Week 1</option><option value="2">Week 2</option>
+        <option value="3">Week 3</option><option value="4">Week 4</option><option value="5">Week 5</option>
+      </select>
+    </div>
+    <div id="adminContent"></div>
+
+    <!-- ══════ FIREBASE SETUP WIZARD ══════ -->
+    <div class="setup-wizard">
+      <div class="wizard-title">🔥 Firebase Firestore Setup Guide</div>
+      <div class="wizard-sub">
+        Follow these steps once to connect this app to Google Firebase. After setup, all registration data is stored in the cloud — accessible from any device, any browser, even after the computer is turned off. Estimated time: <strong style="color:#FF9F43">10–15 minutes</strong>.
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="steps-container">
+      <div class="setup-step">
+        <div class="step-header" onclick="toggleStep('s1')">
+          <div class="step-num blue">1</div>
+          <div class="step-info">
+            <div class="step-title">Create a free Google Firebase project</div>
+            <div class="step-desc">Sign in to Google and create a new Firebase project — no credit card needed</div>
+          </div>
+          <div class="step-chevron open" id="chev-s1">▾</div>
+        </div>
+        <div class="step-body open" id="s1">
+          <p>Go to <a href="https://console.firebase.google.com" target="_blank" class="step-link outline" style="display:inline-flex;margin-top:0;margin-bottom:8px">🔗 console.firebase.google.com ↗</a></p>
+          <p>Sign in with a Google account (use the KWSC admin Google account if you have one).</p>
+          <p>Click <code>Add project</code> → name it <code>kwsc-mcnair</code> → disable Google Analytics (not needed) → click <code>Create project</code>.</p>
+          <div class="tip-box success"><span class="tip-box-icon">✅</span><span class="tip-box-text">Firebase free tier (Spark plan) gives you 1 GB storage, 50,000 reads/day, 20,000 writes/day — more than enough for KWSC.</span></div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="setup-step">
+        <div class="step-header" onclick="toggleStep('s2')">
+          <div class="step-num orange">2</div>
+          <div class="step-info">
+            <div class="step-title">Create a Firestore Database</div>
+            <div class="step-desc">Set up the cloud database inside your project</div>
+          </div>
+          <div class="step-chevron" id="chev-s2">▾</div>
+        </div>
+        <div class="step-body" id="s2">
+          <p>Inside your new project, click <code>Build</code> → <code>Firestore Database</code> in the left sidebar.</p>
+          <p>Click <code>Create database</code>. When asked about rules, choose <strong>Start in production mode</strong> (we will set proper rules in Step 4).</p>
+          <p>Choose location: <strong>asia-southeast1 (Singapore)</strong> — closest to KWSC, fastest response time.</p>
+          <div class="tip-box info"><span class="tip-box-icon">ℹ️</span><span class="tip-box-text">The database location cannot be changed later. Always pick <code>asia-southeast1</code> for Singapore-based apps.</span></div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="setup-step">
+        <div class="step-header" onclick="toggleStep('s3')">
+          <div class="step-num teal">3</div>
+          <div class="step-info">
+            <div class="step-title">Enable Anonymous Authentication</div>
+            <div class="step-desc">Required: lets users save registrations without creating accounts</div>
+          </div>
+          <div class="step-chevron" id="chev-s3">▾</div>
+        </div>
+        <div class="step-body" id="s3">
+          <p>In the left sidebar click <code>Build</code> → <code>Authentication</code> → click <code>Get started</code>.</p>
+          <p>Under the <strong>Sign-in method</strong> tab, click <strong>Anonymous</strong> → toggle it to <strong>Enabled</strong> → click <code>Save</code>.</p>
+          <div class="tip-box info"><span class="tip-box-icon">ℹ️</span><span class="tip-box-text"><strong>Why Anonymous Auth?</strong> Firestore security rules require a logged-in user before writing data. Anonymous Auth silently signs in each visitor without usernames/passwords — the user never sees a login screen, but Firebase knows the write is coming from a legitimate browser session, not a bot.</span></div>
+          <div class="tip-box warn"><span class="tip-box-icon">⚠️</span><span class="tip-box-text">Without Anonymous Auth enabled, all registration submissions will fail with a <code>permission-denied</code> error.</span></div>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="setup-step">
+        <div class="step-header" onclick="toggleStep('s4')">
+          <div class="step-num purple">4</div>
+          <div class="step-info">
+            <div class="step-title">Set Firestore Security Rules</div>
+            <div class="step-desc">Allow public writes (registration), restrict reads to authenticated users only</div>
+          </div>
+          <div class="step-chevron" id="chev-s4">▾</div>
+        </div>
+        <div class="step-body" id="s4">
+          <p>In Firestore, click the <strong>Rules</strong> tab at the top. Replace all existing content with the rules below, then click <strong>Publish</strong>.</p>
+          <div class="rules-block">
+            <div class="rb-title">📋 Firestore Security Rules — copy exactly</div>
+            <div class="code-block" id="rulesCode"><span class="key">rules_version</span> = <span class="str">'2'</span>;
+<span class="kw">service</span> cloud.firestore {
+  match /databases/{database}/documents {
+
+    <span class="cmt">// REGISTRATIONS collection</span>
+    <span class="cmt">// Anyone signed in (including anonymous) can create a registration</span>
+    <span class="cmt">// Only authenticated users can read (protects personal data)</span>
+    match /registrations/{docId} {
+      allow create: if request.auth != null;
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}</div>
+            <button class="copy-btn" onclick="copyCode('rulesCode',this)">Copy</button>
+          </div>
+          <div class="tip-box success"><span class="tip-box-icon">✅</span><span class="tip-box-text">These rules mean: any browser that has done Anonymous Auth (automatic) can write registrations. Reads and deletes require auth too — so the data is never publicly exposed.</span></div>
+        </div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="setup-step">
+        <div class="step-header" onclick="toggleStep('s5')">
+          <div class="step-num red">5</div>
+          <div class="step-info">
+            <div class="step-title">Get your Firebase config keys</div>
+            <div class="step-desc">Copy the project credentials so this app can connect</div>
+          </div>
+          <div class="step-chevron" id="chev-s5">▾</div>
+        </div>
+        <div class="step-body" id="s5">
+          <p>In the Firebase console, click the ⚙️ gear icon (top-left) → <code>Project settings</code>.</p>
+          <p>Scroll to <strong>Your apps</strong> → click the <code>&lt;/&gt;</code> (Web) icon → name it <code>kwsc-web</code> → click <strong>Register app</strong>.</p>
+          <p>Firebase will show a config object like this:</p>
+          <div class="code-block"><span class="kw">const</span> <span class="key">firebaseConfig</span> = {
+  <span class="key">apiKey</span>:            <span class="str">"AIzaSy..."</span>,
+  <span class="key">authDomain</span>:        <span class="str">"kwsc-mcnair.firebaseapp.com"</span>,
+  <span class="key">projectId</span>:         <span class="str">"kwsc-mcnair"</span>,
+  <span class="key">storageBucket</span>:     <span class="str">"kwsc-mcnair.appspot.com"</span>,
+  <span class="key">messagingSenderId</span>: <span class="str">"123456789"</span>,
+  <span class="key">appId</span>:             <span class="str">"1:123456789:web:abc123"</span>
+};</div>
+          <p>Copy each value from that screen and paste it into the fields below.</p>
+          <div class="tip-box warn"><span class="tip-box-icon">⚠️</span><span class="tip-box-text">The <code>apiKey</code> is not a secret — it is safe to include in a web page. It only identifies your project. The Security Rules (Step 4) are what protect your data.</span></div>
+        </div>
+      </div>
+
+      <!-- STEP 6 — paste config -->
+      <div class="setup-step">
+        <div class="step-header" onclick="toggleStep('s6')">
+          <div class="step-num green">6</div>
+          <div class="step-info">
+            <div class="step-title">Paste your config &amp; connect</div>
+            <div class="step-desc">Enter your Firebase credentials below — saved permanently in this browser</div>
+          </div>
+          <div class="step-chevron open" id="chev-s6">▾</div>
+        </div>
+        <div class="step-body open" id="s6">
+          <div class="config-input-area">
+            <div class="ci-title">🔑 Firebase Configuration</div>
+            <div class="ci-row">
+              <div class="ci-field">
+                <label>API Key</label>
+                <input type="text" id="ci_apiKey" placeholder="AIzaSy...">
+              </div>
+              <div class="ci-field">
+                <label>Auth Domain</label>
+                <input type="text" id="ci_authDomain" placeholder="your-project.firebaseapp.com">
+              </div>
+            </div>
+            <div class="ci-row">
+              <div class="ci-field">
+                <label>Project ID</label>
+                <input type="text" id="ci_projectId" placeholder="kwsc-mcnair">
+              </div>
+              <div class="ci-field">
+                <label>Storage Bucket</label>
+                <input type="text" id="ci_storageBucket" placeholder="your-project.appspot.com">
+              </div>
+            </div>
+            <div class="ci-row">
+              <div class="ci-field">
+                <label>Messaging Sender ID</label>
+                <input type="text" id="ci_messagingSenderId" placeholder="123456789012">
+              </div>
+              <div class="ci-field">
+                <label>App ID</label>
+                <input type="text" id="ci_appId" placeholder="1:123456789:web:abc123">
+              </div>
+            </div>
+            <button class="save-config-btn" onclick="saveAndConnect()">🔥 Connect to Firebase</button>
+          </div>
+          <div id="configStatus" style="margin-top:10px;font-size:12px;color:var(--muted)"></div>
+          <div class="tip-box info" style="margin-top:14px"><span class="tip-box-icon">💾</span><span class="tip-box-text">Your config is saved in <code>localStorage</code> under key <code>kwsc_fb_config</code>. You only need to do this once per browser. If you deploy to Vercel, paste the config on each new device that needs admin access.</span></div>
+        </div>
+      </div>
+
+      </div><!-- /steps-container -->
+
+      <!-- HOW TO RETRIEVE DATA -->
+      <div style="margin-top:32px">
+        <div class="wizard-title" style="font-size:17px;margin-bottom:8px">📥 How Admin Retrieves All Registration Data</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">Three ways to access every registration record from Firestore:</div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+          <div class="note-card" style="border-color:rgba(0,210,211,.25);background:rgba(0,210,211,.04)">
+            <strong style="color:#00D2D3">① This Dashboard (recommended)</strong>
+            Unlock Admin tab with password → all registrations load live from Firestore → search, filter by week/activity → click <strong>Export CSV</strong> to download a spreadsheet-ready file.
+          </div>
+          <div class="note-card" style="border-color:rgba(84,160,255,.25);background:rgba(84,160,255,.04)">
+            <strong style="color:#54A0FF">② Firebase Console directly</strong>
+            Go to console.firebase.google.com → your project → Firestore Database → <code>registrations</code> collection. Every document is one registration. Click any document to see fields. Use the export icon at the top to download JSON.
+          </div>
+          <div class="note-card" style="border-color:rgba(167,139,250,.25);background:rgba(167,139,250,.04)">
+            <strong style="color:#a78bfa">③ Firebase Admin SDK (advanced)</strong>
+            For bulk exports, a Node.js script using the Firebase Admin SDK can query all documents with filtering, sorting, and export to CSV. Ask your developer if needed.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /setup-wizard -->
+  </div><!-- /adminPanel -->
+</div><!-- /adminTab -->
+
+</div><!-- /wrapper -->
+
+<!-- REGISTRATION MODAL -->
+<div class="modal-overlay" id="regModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalForm">
+      <div class="modal-icon">📋</div>
+      <div class="modal-title">Activity Registration</div>
+      <div class="modal-sub">KWSC @ McNair · 活动报名</div>
+      <div class="reg-alert" id="regAlert"><span class="reg-alert-icon" id="regAlertIcon"></span><span id="regAlertMsg"></span></div>
+      <div class="dup-warn" id="dupWarn">⚠️ You are already registered for this activity.</div>
+      <div class="info-row">
+        <div class="info-pill"><div class="ip-label">Activity</div><div class="ip-val" id="mActivity">—</div></div>
+        <div class="info-pill"><div class="ip-label">📅 Date</div><div class="ip-val" id="mDate">—</div></div>
+        <div class="info-pill"><div class="ip-label">🕐 Time</div><div class="ip-val" id="mTime">—</div></div>
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="fName" placeholder="e.g. Tan Ah Kow" autocomplete="off">
+        <div class="err-msg" id="fNameErr">Please enter your full name</div>
+      </div>
+      <div class="form-group">
+        <label>User ID <span style="color:var(--muted);font-size:10px;font-weight:400">(alphanumeric)</span></label>
+        <input type="text" id="fUid" placeholder="e.g. TAN001" maxlength="20" autocomplete="off" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+        <div class="hint">Letters and numbers only · e.g. ABC123</div>
+        <div class="err-msg" id="fUidErr">Please enter a valid User ID</div>
+      </div>
+      <button class="submit-btn" id="mSubmit" onclick="submitReg()">✓ Register Now</button>
+      <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+    </div>
+    <div id="modalSuccess" style="display:none">
+      <div class="modal-success">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Registration Confirmed!</div>
+        <div class="success-sub">Saved to Firebase — visible to all staff instantly.</div>
+        <div class="success-detail" id="successDetail"></div>
+        <button class="done-btn" onclick="closeModal()">Done ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-  function filterWeek(value) {
-    const labels = document.querySelectorAll('.week-label');
-    const cells = document.querySelectorAll('[data-week]');
-    
-    if (value === 'all') {
-      cells.forEach(el => el.style.display = '');
-      labels.forEach(el => el.style.display = '');
-    } else {
-      cells.forEach(el => {
-        if (el.dataset.week === value) {
-          el.style.display = '';
-        } else {
-          el.style.display = 'none';
-        }
-      });
-    }
-    document.getElementById('weekSelect').value = value;
+/* ══════════════════════════════════════════════════════
+   SCHEDULE DATA — isoDate drives the 1-week window check
+══════════════════════════════════════════════════════ */
+const SCHEDULE = [
+  {week:'1',day:'mon',date:'02 Mar',isoDate:'2026-03-02',activities:[
+    {id:'w1-m1',name:'Daily Socialising Activities',cn:'每日社交活动',time:'All day',venue:'McNair Centre',reg:false},
+    {id:'w1-m2',name:'SOTA Student Engagement',cn:'新加坡艺术学院',time:'3.15–4.45pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'1',day:'tue',date:'03 Mar',isoDate:'2026-03-03',activities:[
+    {id:'w1-t1',name:'Chair Exercise',cn:'椅子运动',time:'10–11am',venue:'McNair Centre',reg:false},
+    {id:'w1-t2',name:'NUS Student Engagement',cn:'国大学生交流活动',time:'2.30–3.30pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'1',day:'wed',date:'04 Mar',isoDate:'2026-03-04',activities:[
+    {id:'w1-w1',name:'Chair Zumba',cn:'座椅尊巴',time:'10–11am',venue:'Blk 113 Indoor',reg:false},
+    {id:'w1-w2',name:'Ukulele Class',cn:'尤克里里',time:'2.00–3.30pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'1',day:'thu',date:'05 Mar',isoDate:'2026-03-05',activities:[
+    {id:'w1-th1',name:'Low Impact Aerobics (HPB)',cn:'低冲击有氧运动',time:'10–11am',venue:'Blk 114 Pavilion',reg:true},
+    {id:'w1-th2',name:'Sand Art Air Plant Terrarium',cn:'彩砂空气草盆景',time:'2–4pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'1',day:'fri',date:'06 Mar',isoDate:'2026-03-06',activities:[
+    {id:'w1-f1',name:'Chair Zumba (HPB)',cn:'座椅尊巴',time:'10–11am',venue:'Blk 114 Pavilion',reg:true},
+    {id:'w1-f2',name:'BINGO',cn:'宾果游戏',time:'1.30–2.30pm',venue:'McNair Centre',reg:false},
+    {id:'w1-f3',name:'NUS Student Engagement',cn:'国大学生交流活动',time:'2.45–4.15pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'2',day:'mon',date:'09 Mar',isoDate:'2026-03-09',activities:[
+    {id:'w2-m1',name:'Resistance Band Exercise',cn:'拉力带运动',time:'10–11am',venue:'McNair Centre',reg:false},
+    {id:'w2-m2',name:'Daily Socialising Activities',cn:'每日社交活动',time:'All day',venue:'McNair Centre',reg:false}
+  ]},
+  {week:'2',day:'tue',date:'10 Mar',isoDate:'2026-03-10',activities:[
+    {id:'w2-t1',name:'Fitness Exercise',cn:'健身运动',time:'9–10am',venue:'Blk 122 Pavilion',reg:false},
+    {id:'w2-t2',name:'Chair Exercise',cn:'椅子运动',time:'10–11am',venue:'McNair Centre',reg:false},
+    {id:'w2-t3',name:'NUS Student Engagement',cn:'国大学生交流活动',time:'2.30–3.30pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'2',day:'wed',date:'11 Mar',isoDate:'2026-03-11',activities:[
+    {id:'w2-w1',name:'Chair Zumba',cn:'座椅尊巴',time:'10–11am',venue:'Blk 113 Indoor',reg:false},
+    {id:'w2-w2',name:'Drum Alive (Trial Class)',cn:'鼓乐体验',time:'10–11.30am',venue:'KWSC @ SG',reg:true}
+  ]},
+  {week:'2',day:'thu',date:'12 Mar',isoDate:'2026-03-12',activities:[
+    {id:'w2-th1',name:'Low Impact Aerobics (HPB)',cn:'低冲击有氧运动',time:'10–11am',venue:'Blk 114 Pavilion',reg:true},
+    {id:'w2-th2',name:'HAPPY Programme (Pre-MoCA)',cn:'乐活乐程',time:'1–2pm',venue:'McNair Centre',reg:false},
+    {id:'w2-th3',name:'HAPPY Programme',cn:'乐活乐程',time:'2–3pm',venue:'McNair Centre',reg:false},
+    {id:'w2-th4',name:'TCM Talk: Health Soup',cn:'中医讲座',time:'3–5pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'2',day:'fri',date:'13 Mar',isoDate:'2026-03-13',activities:[
+    {id:'w2-f1',name:'Chair Zumba (HPB)',cn:'座椅尊巴',time:'10–11am',venue:'Blk 114 Pavilion',reg:true},
+    {id:'w2-f2',name:'BINGO',cn:'宾果游戏',time:'1.30–2.30pm',venue:'McNair Centre',reg:false},
+    {id:'w2-f3',name:'NUS Student Engagement',cn:'国大学生交流活动',time:'2.45–4.15pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'3',day:'mon',date:'17 Mar',isoDate:'2026-03-17',activities:[
+    {id:'w3-m1',name:'Community Health Post (TTSH)',cn:'社区护士站',time:'2–5pm',venue:'McNair Centre',reg:true},
+    {id:'w3-m2',name:'Feb Birthday King & Queen',cn:'二月生日王后',time:'2.30–4.30pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'3',day:'tue',date:'18 Mar',isoDate:'2026-03-18',activities:[
+    {id:'w3-t1',name:'Fitness Exercise',cn:'健身运动',time:'9–10am',venue:'Blk 122 Pavilion',reg:false},
+    {id:'w3-t2',name:'Chair Exercise',cn:'椅子运动',time:'10–11am',venue:'McNair Centre',reg:false},
+    {id:'w3-t3',name:'NUS Student Engagement',cn:'国大学生交流活动',time:'2.30–3.30pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'3',day:'wed',date:'19 Mar',isoDate:'2026-03-19',activities:[
+    {id:'w3-w1',name:'Chair Zumba',cn:'座椅尊巴',time:'10–11am',venue:'Blk 113 Indoor',reg:false},
+    {id:'w3-w2',name:'SG Digital (IMDA)',cn:'数码科技',time:'10am–12pm / 1–4pm',venue:'McNair Centre',reg:false},
+    {id:'w3-w3',name:'Ukulele Class',cn:'尤克里里',time:'2.00–3.30pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'3',day:'thu',date:'20 Mar',isoDate:'2026-03-20',activities:[
+    {id:'w3-th1',name:'Low Impact Aerobics (HPB)',cn:'低冲击有氧运动',time:'10–11am',venue:'Blk 114 Pavilion',reg:true},
+    {id:'w3-th2',name:'HAPPY Programme',cn:'乐活乐程',time:'2–3pm',venue:'McNair Centre',reg:false}
+  ]},
+  {week:'3',day:'fri',date:'20 Mar',isoDate:'2026-03-20',activities:[
+    {id:'w3-f1',name:'Chair Zumba (HPB)',cn:'座椅尊巴',time:'10–11am',venue:'Blk 114 Pavilion',reg:true},
+    {id:'w3-f2',name:'BINGO',cn:'宾果游戏',time:'1.30–2.30pm',venue:'McNair Centre',reg:false},
+    {id:'w3-f3',name:'NUS Student Engagement',cn:'国大学生交流活动',time:'2.45–4.15pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'4',day:'mon',date:'24 Mar',isoDate:'2026-03-24',activities:[
+    {id:'w4-m1',name:'Resistance Band Exercise',cn:'拉力带运动',time:'10–11am',venue:'McNair Centre',reg:false},
+    {id:'w4-m2',name:'Daily Socialising Activities',cn:'每日社交活动',time:'All day',venue:'McNair Centre',reg:false}
+  ]},
+  {week:'4',day:'tue',date:'25 Mar',isoDate:'2026-03-25',activities:[
+    {id:'w4-t1',name:'Fitness Exercise',cn:'健身运动',time:'9–10am',venue:'Blk 122 Pavilion',reg:false},
+    {id:'w4-t2',name:'Chair Exercise',cn:'椅子运动',time:'10–11am',venue:'McNair Centre',reg:false},
+    {id:'w4-t3',name:'NUS Student Engagement',cn:'国大学生交流活动',time:'2.30–3.30pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'4',day:'wed',date:'26 Mar',isoDate:'2026-03-26',activities:[
+    {id:'w4-w1',name:'Chair Zumba',cn:'座椅尊巴',time:'10–11am',venue:'Blk 113 Indoor',reg:false},
+    {id:'w4-w2',name:'Daily Socialising Activities',cn:'每日社交活动',time:'All day',venue:'McNair Centre',reg:false}
+  ]},
+  {week:'4',day:'thu',date:'26 Mar',isoDate:'2026-03-26',activities:[
+    {id:'w4-th1',name:'Low Impact Aerobics (HPB)',cn:'低冲击有氧运动',time:'10–11am',venue:'Blk 114 Pavilion',reg:true},
+    {id:'w4-th2',name:'HAPPY Programme',cn:'乐活乐程',time:'2–3pm',venue:'McNair Centre',reg:false}
+  ]},
+  {week:'4',day:'fri',date:'27 Mar',isoDate:'2026-03-27',activities:[
+    {id:'w4-f1',name:'Chair Zumba (HPB)',cn:'座椅尊巴',time:'10–11am',venue:'Blk 114 Pavilion',reg:true},
+    {id:'w4-f2',name:'BINGO',cn:'宾果游戏',time:'1.30–2.30pm',venue:'McNair Centre',reg:false},
+    {id:'w4-f3',name:'NUS Student Engagement',cn:'国大学生交流活动',time:'2.45–4.15pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'5',day:'mon',date:'30 Mar',isoDate:'2026-03-30',activities:[
+    {id:'w5-m1',name:'Daily Socialising Activities',cn:'每日社交活动',time:'All day',venue:'McNair Centre',reg:false},
+    {id:'w5-m2',name:'SOTA Student Engagement',cn:'新加坡艺术学院',time:'3.15–4.45pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'5',day:'tue',date:'31 Mar',isoDate:'2026-03-31',activities:[
+    {id:'w5-t1',name:'Fitness Exercise',cn:'健身运动',time:'9–10am',venue:'Blk 122 Pavilion',reg:false},
+    {id:'w5-t2',name:'Chair Exercise',cn:'椅子运动',time:'10–11am',venue:'McNair Centre',reg:false},
+    {id:'w5-t3',name:'NUS Student Engagement',cn:'国大学生交流活动',time:'2.30–3.30pm',venue:'McNair Centre',reg:true},
+    {id:'w5-t4',name:'March Birthday King & Queen',cn:'三月生日王后',time:'2.30–4.30pm',venue:'McNair Centre',reg:true}
+  ]},
+  {week:'5',day:'wed',date:'—',isoDate:null,activities:[]},
+  {week:'5',day:'thu',date:'—',isoDate:null,activities:[]},
+  {week:'5',day:'fri',date:'—',isoDate:null,activities:[]}
+];
+
+/* ══════════════════════════════════════════════════════
+   FIREBASE INIT — config stored in localStorage
+   Falls back to localStorage-only if not configured
+══════════════════════════════════════════════════════ */
+const FB_CONFIG_KEY = 'kwsc_fb_config';
+const LS_STORE_KEY  = 'kwsc_reg_v3';   // localStorage fallback
+
+let db   = null;   // Firestore instance (null = not connected)
+let auth = null;   // Firebase Auth instance
+let currentUser = null;
+let REGS = {};     // in-memory mirror for UI rendering
+let unsubscribe = null;  // Firestore live listener
+
+function setFbStatus(state, text) {
+  const pill = document.getElementById('fbStatusPill');
+  const txt  = document.getElementById('fbStatusText');
+  pill.className = `fb-status ${state}`;
+  txt.textContent = text;
+  // re-add dot
+  const dot = document.createElement('span');
+  dot.className = 'fb-dot';
+  pill.insertBefore(dot, txt);
+}
+
+function loadingBar(pct) {
+  document.getElementById('loadingBar').style.width = pct + '%';
+}
+
+async function initFirebase() {
+  const raw = localStorage.getItem(FB_CONFIG_KEY);
+  if (!raw) {
+    // No config yet — use localStorage fallback
+    setFbStatus('offline', 'Using local storage');
+    REGS = loadLocalRegs();
+    renderGrid(); updateBadge();
+    return;
   }
+  let config;
+  try { config = JSON.parse(raw); } catch {
+    setFbStatus('offline', 'Bad config — using local');
+    REGS = loadLocalRegs(); renderGrid(); updateBadge(); return;
+  }
+
+  setFbStatus('connecting', 'Connecting…');
+  loadingBar(30);
+  try {
+    // Prevent re-initialising if already done
+    if (!firebase.apps.length) {
+      firebase.initializeApp(config);
+    }
+    db   = firebase.firestore();
+    auth = firebase.auth();
+
+    loadingBar(60);
+    // Sign in anonymously — required by security rules
+    const cred = await auth.signInAnonymously();
+    currentUser = cred.user;
+
+    loadingBar(90);
+    setFbStatus('live', '🔥 Firebase Live');
+    // Load initial data
+    await loadFromFirestore();
+    // Start real-time listener
+    startListener();
+    loadingBar(100);
+    setTimeout(() => loadingBar(0), 600);
+    showToast('Connected to Firebase', 'success');
+  } catch(e) {
+    console.error('Firebase init error:', e);
+    setFbStatus('offline', 'Offline — local fallback');
+    REGS = loadLocalRegs(); renderGrid(); updateBadge();
+    showToast('Firebase unavailable — using local storage', 'warn');
+    loadingBar(0);
+  }
+}
+
+/* ── Firestore live listener (real-time updates) ── */
+function startListener() {
+  if (!db) return;
+  if (unsubscribe) unsubscribe();
+  unsubscribe = db.collection('registrations')
+    .onSnapshot(snapshot => {
+      REGS = {};
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        if (!REGS[d.actId]) REGS[d.actId] = [];
+        REGS[d.actId].push({ ...d, _docId: doc.id });
+      });
+      renderGrid();
+      updateBadge();
+      if (adminUnlocked) renderAdmin();
+    }, err => {
+      console.warn('Firestore listener error:', err);
+      setFbStatus('offline', 'Listener error');
+    });
+}
+
+/* ── Load all registrations once ── */
+async function loadFromFirestore() {
+  if (!db) return;
+  const snap = await db.collection('registrations').get();
+  REGS = {};
+  snap.forEach(doc => {
+    const d = doc.data();
+    if (!REGS[d.actId]) REGS[d.actId] = [];
+    REGS[d.actId].push({ ...d, _docId: doc.id });
+  });
+}
+
+/* ── Firestore write ── */
+async function saveRegToFirestore(entry) {
+  if (!db || !currentUser) throw new Error('Not connected to Firebase');
+  const docRef = await db.collection('registrations').add({
+    ...entry,
+    submittedBy: currentUser.uid,
+    serverTs: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  return docRef.id;
+}
+
+/* ── Firestore delete ── */
+async function deleteFromFirestore(docId) {
+  if (!db) throw new Error('Not connected');
+  await db.collection('registrations').doc(docId).delete();
+}
+
+/* ── Firestore clear all ── */
+async function clearFirestore() {
+  if (!db) return;
+  const snap = await db.collection('registrations').get();
+  const batch = db.batch();
+  snap.forEach(doc => batch.delete(doc.ref));
+  await batch.commit();
+}
+
+/* ── localStorage fallback ── */
+function loadLocalRegs() {
+  try { const r = localStorage.getItem(LS_STORE_KEY); return r ? JSON.parse(r) : {}; }
+  catch { return {}; }
+}
+function saveLocalRegs(data) {
+  try { localStorage.setItem(LS_STORE_KEY, JSON.stringify(data)); }
+  catch(e) { console.warn('localStorage save failed',e); }
+}
+
+/* ── Admin config save & connect ── */
+async function saveAndConnect() {
+  const fields = ['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'];
+  const config = {};
+  let missing = [];
+  fields.forEach(f => {
+    const v = document.getElementById('ci_'+f)?.value.trim();
+    if (!v) missing.push(f);
+    else config[f] = v;
+  });
+  if (missing.length) {
+    document.getElementById('configStatus').innerHTML =
+      `<span style="color:#FF6B6B">⚠️ Please fill in: ${missing.join(', ')}</span>`;
+    return;
+  }
+  localStorage.setItem(FB_CONFIG_KEY, JSON.stringify(config));
+  document.getElementById('configStatus').innerHTML = '<span style="color:#00D2D3">✓ Config saved — connecting…</span>';
+  // Re-init
+  db = null; auth = null; currentUser = null;
+  if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+  await initFirebase();
+  if (db) {
+    document.getElementById('configStatus').innerHTML =
+      '<span style="color:#00D2D3">✅ Connected to Firebase successfully!</span>';
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   1-WEEK REGISTRATION WINDOW CHECK
+══════════════════════════════════════════════════════ */
+function checkRegWindow(isoDate) {
+  if (!isoDate) return { status:'no_date', daysUntil:null };
+  const today = new Date(); today.setHours(0,0,0,0);
+  const actDate = new Date(isoDate); actDate.setHours(0,0,0,0);
+  const daysUntil = Math.round((actDate - today) / 86400000);
+  if (daysUntil < 0) return { status:'too_late',  daysUntil };
+  if (daysUntil > 7) return { status:'too_early', daysUntil };
+  return               { status:'ok',         daysUntil };
+}
+
+/* ══════════════════════════════════════════════════════
+   GRID RENDERING
+══════════════════════════════════════════════════════ */
+const DAY_ORDER = ['mon','tue','wed','thu','fri'];
+const WEEKS = ['1','2','3','4','5'];
+const BANNER_LABELS = {
+  '1':'Week 1 · 2–7 March 2026','2':'Week 2 · 9–14 March 2026',
+  '3':'Week 3 · 17–21 March 2026','4':'Week 4 · 24–28 March 2026','5':'Week 5 · 30–31 March 2026'
+};
+
+function renderGrid() {
+  const grid = document.getElementById('scheduleGrid');
+  const headers = Array.from(grid.children).slice(0,5);
+  grid.innerHTML = ''; headers.forEach(h => grid.appendChild(h));
+  WEEKS.forEach(week => {
+    const banner = document.createElement('div');
+    banner.className = 'week-banner'; banner.setAttribute('data-week', week);
+    banner.textContent = BANNER_LABELS[week]; grid.appendChild(banner);
+    DAY_ORDER.forEach(day => {
+      const col = SCHEDULE.find(c => c.week===week && c.day===day);
+      const cell = document.createElement('div');
+      cell.className = `day-col ${day}`; cell.setAttribute('data-week', week);
+      if (!col || col.activities.length===0) { cell.classList.add('empty'); }
+      else {
+        cell.innerHTML = `<div class="date-chip">${col.date}</div>`;
+        col.activities.forEach(act => {
+          const count = (REGS[act.id]||[]).length;
+          cell.appendChild(makeActCard(act, day, count, col.isoDate));
+        });
+      }
+      grid.appendChild(cell);
+    });
+  });
+}
+
+function makeActCard(act, day, count, isoDate) {
+  const div = document.createElement('div');
+  div.className = `act ${day}`; div.id = `act-${act.id}`;
+  const win = checkRegWindow(isoDate);
+  const isClosed = (win.status==='too_early'||win.status==='too_late');
+  if (isClosed) div.classList.add('closed-reg');
+  const countBadge = `<div class="reg-count${count>0?' has-regs':''}" id="cnt-${act.id}">${count||''}</div>`;
+  const regTag = act.reg ? `<div class="act-reg-tag">⚠️ Registration required</div>` : '';
+  let closedNote = '';
+  if (win.status==='too_early') closedNote = `<div class="reg-closed-badge">Opens in ${win.daysUntil-7} days</div>`;
+  if (win.status==='too_late')  closedNote = `<div class="reg-closed-badge">Activity has passed</div>`;
+  const btnLabel = win.status==='too_late' ? '✕ Closed' : win.status==='too_early' ? '🔒 Not open yet' : '✏️ Register';
+  div.innerHTML = `${countBadge}<div class="act-name">${act.name}</div>${act.cn?`<div class="act-cn">${act.cn}</div>`:''}<div class="act-time">🕐 ${act.time}</div>${regTag}${closedNote}<button class="reg-btn" onclick="event.stopPropagation();openModal('${act.id}')" ${isClosed?'disabled':''}>${btnLabel}</button>`;
+  return div;
+}
+
+/* ══════════════════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════════════════ */
+let currentActId = null;
+
+function openModal(actId) {
+  currentActId = actId;
+  let act=null, col=null;
+  for (const c of SCHEDULE) { const f=c.activities.find(a=>a.id===actId); if(f){act=f;col=c;break;} }
+  if (!act) return;
+  document.getElementById('modalForm').style.display = 'block';
+  document.getElementById('modalSuccess').style.display = 'none';
+  document.getElementById('fName').value = ''; document.getElementById('fUid').value = '';
+  document.getElementById('fName').classList.remove('error'); document.getElementById('fUid').classList.remove('error');
+  document.getElementById('dupWarn').classList.remove('show');
+  document.getElementById('mActivity').textContent = act.name;
+  document.getElementById('mDate').textContent = col.date||'—';
+  document.getElementById('mTime').textContent = act.time||'—';
+
+  const win = checkRegWindow(col.isoDate);
+  const alertEl=document.getElementById('regAlert'), alertIcon=document.getElementById('regAlertIcon'), alertMsg=document.getElementById('regAlertMsg');
+  const submitBtn=document.getElementById('mSubmit');
+  alertEl.className='reg-alert'; submitBtn.disabled=false; submitBtn.textContent='✓ Register Now';
+  if (win.status==='too_late') {
+    alertEl.classList.add('show','error'); alertIcon.textContent='🚫';
+    alertMsg.textContent=`Registration closed — activity was on ${col.date}.`;
+    submitBtn.disabled=true; submitBtn.textContent='Registration Closed';
+  } else if (win.status==='too_early') {
+    const opensOn=new Date(col.isoDate); opensOn.setDate(opensOn.getDate()-7);
+    alertEl.classList.add('show','warn'); alertIcon.textContent='⏳';
+    alertMsg.textContent=`Registration opens on ${opensOn.toLocaleDateString('en-SG',{day:'2-digit',month:'short',year:'numeric'})} (${win.daysUntil-7} days).`;
+  } else if (win.status==='ok') {
+    alertEl.classList.add('show','info'); alertIcon.textContent = win.daysUntil===0?'✅':'🗓️';
+    alertMsg.textContent = win.daysUntil===0 ? 'Activity is today — register now!' : `Registration open — activity in ${win.daysUntil} day${win.daysUntil!==1?'s':''}.`;
+  }
+  document.getElementById('regModal').classList.add('open');
+  setTimeout(()=>document.getElementById('fName').focus(),200);
+}
+
+function closeModal() { document.getElementById('regModal').classList.remove('open'); currentActId=null; }
+document.getElementById('regModal').addEventListener('click', e=>{ if(e.target===document.getElementById('regModal'))closeModal(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape')closeModal(); });
+
+async function submitReg() {
+  if (!currentActId) return;
+  const name=document.getElementById('fName').value.trim();
+  const uid=document.getElementById('fUid').value.trim();
+  document.getElementById('fName').classList.remove('error'); document.getElementById('fUid').classList.remove('error');
+  let valid=true;
+  if (!name||name.length<2){document.getElementById('fName').classList.add('error');valid=false;}
+  if (!uid||!/^[A-Z0-9]+$/i.test(uid)||uid.length<2){document.getElementById('fUid').classList.add('error');valid=false;}
+  if (!valid) return;
+
+  // Duplicate check
+  const existing=REGS[currentActId]||[];
+  if (existing.find(r=>r.userId.toUpperCase()===uid.toUpperCase())) {
+    document.getElementById('dupWarn').classList.add('show'); return;
+  }
+
+  const btn=document.getElementById('mSubmit'); btn.disabled=true; btn.textContent='Saving…';
+  let actMeta=null, colMeta=null;
+  for (const col of SCHEDULE){ const f=col.activities.find(a=>a.id===currentActId); if(f){actMeta=f;colMeta=col;break;} }
+
+  const entry = {
+    name, userId: uid.toUpperCase(), actId: currentActId,
+    actName: actMeta?.name||'', actDate: colMeta?.date||'',
+    actTime: actMeta?.time||'', venue: actMeta?.venue||'McNair Centre',
+    ts: new Date().toISOString()
+  };
+
+  try {
+    if (db && currentUser) {
+      // Save to Firestore — listener will update REGS automatically
+      await saveRegToFirestore(entry);
+    } else {
+      // Fallback to localStorage
+      if (!REGS[currentActId]) REGS[currentActId]=[];
+      REGS[currentActId].push(entry);
+      saveLocalRegs(REGS);
+      renderGrid(); updateBadge();
+    }
+
+    document.getElementById('modalForm').style.display='none';
+    document.getElementById('successDetail').innerHTML=`
+      <div class="row"><span>Activity</span><span>${actMeta?.name||'—'}</span></div>
+      <div class="row"><span>📅 Date</span><span>${colMeta?.date||'—'}</span></div>
+      <div class="row"><span>🕐 Time</span><span>${actMeta?.time||'—'}</span></div>
+      <div class="row"><span>📍 Venue</span><span>${actMeta?.venue||'McNair Centre'}</span></div>
+      <div class="row"><span>👤 Name</span><span>${name}</span></div>
+      <div class="row"><span>🪪 User ID</span><span>${uid.toUpperCase()}</span></div>
+      <div class="row"><span>💾 Storage</span><span style="color:${db?'#00D2D3':'#FF9F43'}">${db?'🔥 Firebase Cloud':'📦 Local (offline)'}</span></div>
+    `;
+    document.getElementById('modalSuccess').style.display='block';
+    showToast('Registration confirmed! 🎉','success');
+  } catch(e) {
+    console.error('Save error:',e);
+    btn.disabled=false; btn.textContent='✓ Register Now';
+    if (e.code==='permission-denied') {
+      showToast('Permission denied — check Firestore rules (Step 4)','error');
+    } else {
+      showToast('Save failed: '+e.message,'error');
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   WEEK FILTER
+══════════════════════════════════════════════════════ */
+function filterWeek(val) {
+  document.querySelectorAll('[data-week]').forEach(el=>{
+    el.style.display=(val==='all'||el.getAttribute('data-week')===val)?'':'none';
+  });
+}
+
+/* ══════════════════════════════════════════════════════
+   TAB SWITCHING
+══════════════════════════════════════════════════════ */
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('scheduleTab').style.display=tab==='schedule'?'block':'none';
+  document.getElementById('adminTab').style.display=tab==='admin'?'block':'none';
+  if (tab==='admin') renderAdmin();
+}
+
+/* ══════════════════════════════════════════════════════
+   ADMIN
+══════════════════════════════════════════════════════ */
+const ADMIN_PWD='kwsc2026';
+let adminUnlocked=false;
+
+function checkAdmin() {
+  const v=document.getElementById('adminPwdInput').value;
+  if (v===ADMIN_PWD) {
+    adminUnlocked=true;
+    document.getElementById('adminLock').style.display='none';
+    document.getElementById('adminPanel').classList.add('active');
+    // Pre-fill any saved config
+    const raw=localStorage.getItem(FB_CONFIG_KEY);
+    if (raw) { try { const c=JSON.parse(raw); ['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'].forEach(k=>{const el=document.getElementById('ci_'+k);if(el)el.value=c[k]||'';}); } catch{} }
+    renderAdmin();
+  } else {
+    document.getElementById('pwdErr').style.display='block';
+    setTimeout(()=>document.getElementById('pwdErr').style.display='none',2000);
+  }
+}
+
+async function refreshAdmin() {
+  if (db) { await loadFromFirestore(); }
+  else { REGS=loadLocalRegs(); }
+  renderAdmin(); renderGrid(); updateBadge();
+  showToast('Data refreshed','info');
+}
+
+function renderAdmin() {
+  if (!adminUnlocked) return;
+  const search=(document.getElementById('adminSearch').value||'').toLowerCase();
+  const actFilt=document.getElementById('actFilter').value;
+  const weekFilt=document.getElementById('weekFilter').value;
+
+  let allRegs=[];
+  for (const [actId,entries] of Object.entries(REGS)) {
+    let actMeta=null,colMeta=null;
+    for (const col of SCHEDULE){ const f=col.activities.find(a=>a.id===actId); if(f){actMeta=f;colMeta=col;break;} }
+    if (!actMeta) continue;
+    entries.forEach(e=>allRegs.push({...e,actMeta,colMeta,actId}));
+  }
+
+  let filtered=allRegs.filter(r=>{
+    if (weekFilt!=='all'&&r.colMeta.week!==weekFilt) return false;
+    if (actFilt!=='all'&&r.actId!==actFilt) return false;
+    if (search&&!r.name.toLowerCase().includes(search)&&!r.userId.toLowerCase().includes(search)&&!r.actMeta.name.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const totalUnique=new Set(allRegs.map(r=>r.userId)).size;
+  const totalActs=Object.keys(REGS).filter(k=>REGS[k].length>0).length;
+  const todayStr=new Date().toISOString().slice(0,10);
+  const todayRegs=allRegs.filter(r=>r.ts&&r.ts.startsWith(todayStr)).length;
+  const storageLabel = db ? '🔥 Firebase' : '📦 Local';
+  document.getElementById('statsGrid').innerHTML=`
+    <div class="stat-card blue"><div class="stat-icon">📋</div><div class="stat-val">${allRegs.length}</div><div class="stat-label">Total Registrations</div></div>
+    <div class="stat-card orange"><div class="stat-icon">👥</div><div class="stat-val">${totalUnique}</div><div class="stat-label">Unique Participants</div></div>
+    <div class="stat-card green"><div class="stat-icon">🎯</div><div class="stat-val">${totalActs}</div><div class="stat-label">Activities Booked</div></div>
+    <div class="stat-card purple"><div class="stat-icon">📅</div><div class="stat-val">${todayRegs}</div><div class="stat-label">Registered Today · ${storageLabel}</div></div>
+  `;
+
+  const actSel=document.getElementById('actFilter'); const curVal=actSel.value;
+  actSel.innerHTML='<option value="all">All Activities</option>';
+  for (const col of SCHEDULE) col.activities.forEach(act=>{
+    const rc=(REGS[act.id]||[]).length; if(rc>0){
+      const opt=document.createElement('option'); opt.value=act.id;
+      opt.textContent=`${act.name} (${col.date}) — ${rc}`; if(opt.value===curVal)opt.selected=true;
+      actSel.appendChild(opt);
+    }
+  });
+
+  const byAct={};
+  filtered.forEach(r=>{ if(!byAct[r.actId])byAct[r.actId]={meta:r.actMeta,col:r.colMeta,entries:[]}; byAct[r.actId].entries.push(r); });
+
+  const container=document.getElementById('adminContent');
+  if (!Object.keys(byAct).length) {
+    container.innerHTML=`<div class="empty-state"><div class="empty-icon">📭</div>No registrations found${search?' matching "'+search+'"':''}.</div>`;
+    return;
+  }
+  container.innerHTML='';
+  for (const [actId,group] of Object.entries(byAct)) {
+    const div=document.createElement('div'); div.className='activity-group';
+    div.innerHTML=`
+      <div class="ag-header" onclick="toggleGroup('grp-${actId}')">
+        <div class="ag-left"><div>
+          <div class="ag-title">${group.meta.name}</div>
+          <div class="ag-date">📅 ${group.col.date} &nbsp;·&nbsp; 🕐 ${group.meta.time} &nbsp;·&nbsp; 📍 ${group.meta.venue}</div>
+        </div></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="ag-count">${group.entries.length} registered</span>
+          <span class="ag-chevron" id="chev-${actId}">▾</span>
+        </div>
+      </div>
+      <div class="ag-body open" id="grp-${actId}">
+        <table class="reg-table">
+          <thead><tr><th>#</th><th>Name</th><th>User ID</th><th>Registered At</th><th></th></tr></thead>
+          <tbody>
+            ${group.entries.map((e,i)=>`
+              <tr>
+                <td style="color:var(--muted)">${i+1}</td>
+                <td style="font-weight:600">${escHtml(e.name)}</td>
+                <td><span class="uid-badge">${escHtml(e.userId)}</span></td>
+                <td class="ts-text">${formatTs(e.ts)}</td>
+                <td><button class="del-row-btn" onclick="deleteReg('${actId}','${escHtml(e.userId)}','${escHtml(e._docId||'')}')">Remove</button></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+    container.appendChild(div);
+  }
+}
+
+function toggleGroup(id) {
+  const body=document.getElementById(id); const chev=document.getElementById(id.replace('grp-','chev-'));
+  if(!body)return; body.classList.toggle('open'); if(chev)chev.classList.toggle('open');
+}
+
+async function deleteReg(actId, userId, docId) {
+  if (!confirm(`Remove registration for ${userId}?`)) return;
+  try {
+    if (db && docId) {
+      await deleteFromFirestore(docId);
+      // listener will update REGS
+    } else {
+      if (!REGS[actId]) return;
+      REGS[actId]=REGS[actId].filter(r=>r.userId!==userId);
+      if (!REGS[actId].length) delete REGS[actId];
+      saveLocalRegs(REGS);
+      renderAdmin(); renderGrid(); updateBadge();
+    }
+    showToast('Registration removed','info');
+  } catch(e) { showToast('Delete failed: '+e.message,'error'); }
+}
+
+async function clearAllConfirm() {
+  if (!confirm('⚠️ Delete ALL registrations from '+(db?'Firebase':'local storage')+'? Cannot be undone.')) return;
+  try {
+    if (db) { await clearFirestore(); }
+    else { REGS={}; saveLocalRegs(REGS); renderAdmin(); renderGrid(); updateBadge(); }
+    showToast('All registrations cleared','error');
+  } catch(e) { showToast('Clear failed: '+e.message,'error'); }
+}
+
+function exportCSV() {
+  const rows=[['Activity','Date','Time','Venue','Name','User ID','Registered At','Storage']];
+  for (const [actId,entries] of Object.entries(REGS)) {
+    let actMeta=null,colMeta=null;
+    for (const col of SCHEDULE){ const f=col.activities.find(a=>a.id===actId); if(f){actMeta=f;colMeta=col;break;} }
+    entries.forEach(e=>rows.push([actMeta?.name||actId,colMeta?.date||'',actMeta?.time||'',actMeta?.venue||'',e.name,e.userId,formatTs(e.ts),db?'Firebase':'localStorage']));
+  }
+  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='kwsc_registrations.csv'; a.click();
+  showToast('CSV exported!','success');
+}
+
+/* ══════════════════════════════════════════════════════
+   WIZARD HELPERS
+══════════════════════════════════════════════════════ */
+function toggleStep(id) {
+  const body=document.getElementById(id); const chev=document.getElementById('chev-'+id);
+  if(!body)return; body.classList.toggle('open'); if(chev)chev.classList.toggle('open');
+}
+function copyCode(id, btn) {
+  const el=document.getElementById(id); if(!el)return;
+  navigator.clipboard.writeText(el.innerText).then(()=>{ btn.textContent='Copied!'; setTimeout(()=>btn.textContent='Copy',2000); });
+}
+
+/* ══════════════════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════════════════ */
+function updateBadge() {
+  const total=Object.values(REGS).reduce((s,arr)=>s+arr.length,0);
+  document.getElementById('totalBadge').textContent=total;
+}
+function formatTs(ts) {
+  if(!ts)return'—';
+  try{const d=new Date(ts);return d.toLocaleDateString('en-SG',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-SG',{hour:'2-digit',minute:'2-digit'});}
+  catch{return ts;}
+}
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast'); t.textContent=msg;
+  t.className=`toast ${type} show`; setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
+initFirebase();
 </script>
 </body>
 </html>
